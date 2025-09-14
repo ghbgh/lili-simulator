@@ -199,19 +199,20 @@
     <div class="relics-section">
       <div class="section-title">莉莉强化选项</div>
       <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
-        <label><input type="checkbox" id="opt-pray-amount" onchange="updateUI()"> 祈祷恢复量+10%（儿泣精灵的戒指）</label>
-        <label><input type="checkbox" id="opt-pray-amount5" onchange="updateUI()"> 祈祷恢复量+5%</label>
-        <label><input type="checkbox" id="opt-pray-amount-10" onchange="updateUI()"> 祈祷恢复量-10%</label>
-        <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"> 祈祷次数上限+1（白巫女娃娃：与守护者战斗开始时祈祷次数回复至上限）</label>
-        <label><input type="checkbox" id="opt-molili" onchange="updateUI()"> 莫莉莉的戒指：受到攻击时反弹防御力×1点伤害</label>
-        <label><input type="checkbox" id="opt-statue" onchange="updateUI()"> 白巫女的雕像：祈祷使用次数上限+1，祈祷恢复生命时会对敌人造成恢复量一半的伤害（伤害计算防御）</label>
-        <label><input type="checkbox" id="opt-glove" onchange="toggleGlove()"> 执行人的手套：每回合攻击两次，攻击-6</label>
+        <label><input type="checkbox" id="opt-pray-amount" onchange="updateUI()"> 祈祷恢复量+10%（儿汝莉德的戒指）</label>
+        <label><input type="checkbox" id="opt-pray-amount5" onchange="updateUI()"> 祈祷恢复量+5%（纯净清泉的圣水）</label>
+        <label><input type="checkbox" id="opt-pray-amount-10" onchange="togglePrayDefense()"> 祈祷恢复量-10%，防御力+4（莉可丽丝的戒指）</label>
+        <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"> 祈祷次数上限+1，boss战开始祈祷次数回复至上限（白巫女娃娃）</label>
+        <label><input type="checkbox" id="opt-earring" onchange="updateUI()"> 祈祷次数上限+1（白巫女耳环）</label>
+        <label><input type="checkbox" id="opt-molili" onchange="updateUI(); toggleMoliliRing()"> 受到攻击时反弹防御力×1点伤害，防御+3（芙莉蒂雅的戒指）</label>
+        <label><input type="checkbox" id="opt-statue" onchange="updateUI()"> 祈祷使用次数上限+1，祈祷回血量造成一半伤害，计算防御（白巫女的雕像）</label>
+        <label><input type="checkbox" id="opt-glove" onchange="toggleGlove()"> 每回合攻击两次，攻击-5（执行人的手套）</label>
         <label><input type="checkbox" id="opt-no-pray" onchange="updateUI()"> 不能使用祈祷</label>
-        <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"> 对守护者（boss）攻击力提高2点</label>
+        <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"> 对守护者攻击力提高2点</label>
         <label><input type="checkbox" id="opt-minion-atk" onchange="updateUI()"> 对小怪攻击力提高3点</label>
-        <label><input type="checkbox" id="opt-restraint" onchange="updateUI()"> 禁锢：敌方首轮不能发动攻击</label>
-        <label><input type="checkbox" id="opt-immunity" onchange="updateUI()"> 免疫非攻击类伤害：免疫特殊技能造成的非攻击伤害</label>
-        <label><input type="checkbox" id="opt-swap-atk-def" onchange="swapAtkDef()"> 交换攻击和防御</label>
+        <label><input type="checkbox" id="opt-restraint" onchange="updateUI(); toggleMagicChain()"> 首轮禁锢敌方使其不能攻击，防御+1（魔线脚链）</label>
+        <label><input type="checkbox" id="opt-immunity" onchange="toggleImmunityDefense()"> 免疫非攻击类伤害，防御+3（雅若拉的戒指）</label>
+        <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"> 交换攻击和防御，攻击+2，防御+2</label>
       </div>
     </div>
   </div>
@@ -346,6 +347,7 @@ function resetGame() {
   document.getElementById('opt-restraint').checked = false;
   document.getElementById('opt-immunity').checked = false;
   document.getElementById('opt-swap-atk-def').checked = false;
+  document.getElementById('opt-earring').checked = false;
   
   // 直接设置输入框的值为初始值
   document.getElementById('input-atk').value = 10;
@@ -441,6 +443,7 @@ function fightMinion() {
   const optPrayAmount5 = document.getElementById('opt-pray-amount5').checked;
   const optPrayAmountMinus10 = document.getElementById('opt-pray-amount-10').checked;
   const optPrayCount = document.getElementById('opt-pray-count').checked;
+  const optEarring = document.getElementById('opt-earring').checked;
   const optMolili = document.getElementById('opt-molili').checked;
   const optStatue = document.getElementById('opt-statue').checked;
   const optGlove = document.getElementById('opt-glove').checked;
@@ -458,6 +461,7 @@ function fightMinion() {
   if (optPrayAmount5) prayAmount += 0.05;
   if (optPrayAmountMinus10) prayAmount -= 0.1;
   if (optPrayCount) prayMax += 1;
+  if (optEarring) prayMax += 1;
   if (optStatue) prayMax += 1;
   let atkTimes = 1;
   if (optGlove) atkTimes = 2;
@@ -494,7 +498,7 @@ function fightMinion() {
     maxHp: lili.maxHp,
     hp: startHp,
     pray: lili.pray
-  }, minion, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optNoPray, optMinionAtk, optRestraint, optImmunity});
+  }, minion, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optEarring, optNoPray, optMinionAtk, optRestraint, optImmunity});
   
   const oldHp = lili.hp;
   const oldPray = lili.pray;
@@ -540,6 +544,7 @@ function updateBossIndicators() {
   const optPrayAmount5 = document.getElementById('opt-pray-amount5').checked;
   const optPrayAmountMinus10 = document.getElementById('opt-pray-amount-10').checked;
   const optPrayCount = document.getElementById('opt-pray-count').checked;
+  const optEarring = document.getElementById('opt-earring').checked;
   const optMolili = document.getElementById('opt-molili').checked;
   const optStatue = document.getElementById('opt-statue').checked;
   const optGlove = document.getElementById('opt-glove').checked;
@@ -554,6 +559,7 @@ function updateBossIndicators() {
   if (optPrayAmount5) prayAmount += 0.05;
   if (optPrayAmountMinus10) prayAmount -= 0.1;
   if (optPrayCount) prayMax += 1;
+  if (optEarring) prayMax += 1;
   if (optStatue) prayMax += 1;
   let atkTimes = optGlove ? 2 : 1;
   
@@ -569,7 +575,7 @@ function updateBossIndicators() {
       maxHp: lili.maxHp,
       hp: lili.maxHp, // 用满血计算
       pray: prayMax // 用满祈祷次数计算
-    }, bosses[i], i, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optNoPray, optBossAtk, optRestraint, optImmunity});
+    }, bosses[i], i, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optEarring, optNoPray, optBossAtk, optRestraint, optImmunity});
     
     // 设置颜色
     if (result.win) {
@@ -615,22 +621,29 @@ function updateBossIndicators() {
   }
 }
 
-function swapAtkDef() {
-  // 直接交换UI界面上的数值
-  const atkInput = document.getElementById('input-atk');
-  const defInput = document.getElementById('input-def');
+function toggleSwapAtkDef() {
+  const isChecked = document.getElementById('opt-swap-atk-def').checked;
   
-  const tempValue = atkInput.value;
-  atkInput.value = defInput.value;
-  defInput.value = tempValue;
+  if (isChecked) {
+    // 选中时：交换攻击和防御，然后各自+2
+    const tempAtk = lili.atk;
+    lili.atk = lili.def + 2;
+    lili.def = tempAtk + 2;
+  } else {
+    // 取消时：先各自-2，然后交换回去
+    const tempAtk = Math.max(1, lili.atk - 2);
+    const tempDef = Math.max(0, lili.def - 2);
+    lili.atk = tempDef;
+    lili.def = tempAtk;
+  }
   
-  // 更新lili对象的值
-  lili.atk = parseInt(atkInput.value) || 10;
-  lili.def = parseInt(defInput.value) || 3;
+  // 更新输入框的值
+  document.getElementById('input-atk').value = lili.atk;
+  document.getElementById('input-def').value = lili.def;
   
   // 显示动画
-  animateInput(atkInput);
-  animateInput(defInput);
+  animateInput(document.getElementById('input-atk'));
+  animateInput(document.getElementById('input-def'));
   
   updateUI();
 }
@@ -639,11 +652,11 @@ function toggleGlove() {
   const isChecked = document.getElementById('opt-glove').checked;
   
   if (isChecked) {
-    // 选中时攻击力-6
-    lili.atk = Math.max(1, lili.atk - 6);
+    // 选中时攻击力-5
+    lili.atk = Math.max(1, lili.atk - 5);
   } else {
-    // 取消时攻击力+6
-    lili.atk += 6;
+    // 取消时攻击力+5
+    lili.atk += 5;
   }
   
   // 更新输入框的值
@@ -655,12 +668,93 @@ function toggleGlove() {
   updateUI();
 }
 
+function togglePrayDefense() {
+  const isChecked = document.getElementById('opt-pray-amount-10').checked;
+  
+  if (isChecked) {
+    // 选中时防御力+4
+    lili.def += 4;
+  } else {
+    // 取消时防御力-4
+    lili.def = Math.max(0, lili.def - 4);
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
+function toggleImmunityDefense() {
+  const isChecked = document.getElementById('opt-immunity').checked;
+  
+  if (isChecked) {
+    // 选中时防御力+3
+    lili.def += 3;
+  } else {
+    // 取消时防御力-3
+    lili.def = Math.max(0, lili.def - 3);
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
+function toggleMagicChain() {
+  const isChecked = document.getElementById('opt-restraint').checked;
+  
+  if (isChecked) {
+    // 选中时防御力+1
+    lili.def += 1;
+  } else {
+    // 取消时防御力-1
+    lili.def = Math.max(0, lili.def - 1);
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
+function toggleMoliliRing() {
+  const isChecked = document.getElementById('opt-molili').checked;
+  
+  if (isChecked) {
+    // 选中时防御力+3
+    lili.def += 3;
+  } else {
+    // 取消时防御力-3
+    lili.def = Math.max(0, lili.def - 3);
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
 function updateUI() {
   // 读取强化选项
   const optPrayAmount = document.getElementById('opt-pray-amount').checked;
   const optPrayAmount5 = document.getElementById('opt-pray-amount5').checked;
   const optPrayAmountMinus10 = document.getElementById('opt-pray-amount-10').checked;
   const optPrayCount = document.getElementById('opt-pray-count').checked;
+  const optEarring = document.getElementById('opt-earring').checked;
   const optMolili = document.getElementById('opt-molili').checked;
   const optStatue = document.getElementById('opt-statue').checked;
   const optGlove = document.getElementById('opt-glove').checked;
@@ -680,6 +774,7 @@ function updateUI() {
   if (optPrayAmount5) prayAmount += 0.05;
   if (optPrayAmountMinus10) prayAmount -= 0.1;
   if (optPrayCount) prayMax += 1;
+  if (optEarring) prayMax += 1;
   if (optStatue) prayMax += 1;
   let atkTimes = 1;
   if (optGlove) { atkTimes = 2; }
@@ -740,7 +835,7 @@ function updateUI() {
     maxHp: lili.maxHp,
     hp: lili.hp,
     pray: lili.pray
-  }, boss, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optNoPray, optBossAtk, optRestraint, optImmunity});
+  }, boss, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optEarring, optNoPray, optBossAtk, optRestraint, optImmunity});
   
   if (result.win) {
     document.getElementById('battle-result').innerHTML = '<span class="victory-text">胜利！</span>';
@@ -758,7 +853,7 @@ function updateUI() {
       maxHp: lili.maxHp,
       hp: lili.hp,
       pray: lili.pray
-    }, minion, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optNoPray, optMinionAtk, optRestraint, optImmunity});
+    }, minion, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optEarring, optNoPray, optMinionAtk, optRestraint, optImmunity});
     if (minionResult.win) {
       const hpConsumed = lili.hp - minionResult.finalHp;
       document.getElementById('minion-predict').innerHTML = '<span class="victory-text">预测：胜利</span>，消耗血量' + hpConsumed;
