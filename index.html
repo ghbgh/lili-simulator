@@ -217,6 +217,7 @@
         <label><input type="checkbox" id="opt-restraint" onchange="toggleMagicChain()"> （魔线脚链）首轮禁锢敌方使其不能攻击，防御+1</label>
         <label><input type="checkbox" id="opt-immunity" onchange="toggleImmunityDefense()"> （雅若拉的戒指）免疫非攻击类伤害，防御+3</label>
         <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"> （灵涡戒）交换攻击和防御，攻击+2，防御+2</label>
+        <label><input type="checkbox" id="opt-dragon-claw" onchange="toggleDragonClaw()"> （古龙爪）减少50%防御并增加两倍减少的值到攻击力</label>
         <label><input type="checkbox" id="opt-no-pray" onchange="updateUI()"> （旧版道具）不能使用祈祷</label>
         <label><input type="checkbox" id="opt-minion-atk" onchange="updateUI()"> （旧版道具）对小怪攻击力提高3点</label>
       </div>
@@ -386,6 +387,7 @@ function resetGame() {
   document.getElementById('opt-restraint').checked = false;
   document.getElementById('opt-immunity').checked = false;
   document.getElementById('opt-swap-atk-def').checked = false;
+  document.getElementById('opt-dragon-claw').checked = false;
   document.getElementById('opt-earring').checked = false;
   
   // 直接设置输入框的值为初始值
@@ -402,6 +404,9 @@ function resetGame() {
   animateInput(document.getElementById('input-hp'));
   animateInput(document.getElementById('input-corruption'));
   animateInput(document.getElementById('pray-used'));
+  
+  // 清理全局变量
+  window.dragonClawDefReduction = 0;
   
   updateUI();
 }
@@ -783,6 +788,38 @@ function toggleMoliliRing() {
   document.getElementById('input-def').value = lili.def;
   
   // 显示动画
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
+function toggleDragonClaw() {
+  const isChecked = document.getElementById('opt-dragon-claw').checked;
+  
+  if (isChecked) {
+    // 选中时：减少50%防御并增加两倍减少的值到攻击力
+    const defReduction = Math.floor(lili.def * 0.5);
+    lili.def -= defReduction;
+    lili.atk += defReduction * 2;
+    
+    // 将原始减少值存储在全局变量中以便恢复
+    window.dragonClawDefReduction = defReduction;
+  } else {
+    // 取消时：恢复原始值
+    const defReduction = window.dragonClawDefReduction || 0;
+    lili.def += defReduction;
+    lili.atk -= defReduction * 2;
+    
+    // 清理全局变量
+    window.dragonClawDefReduction = 0;
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-atk').value = lili.atk;
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-atk'));
   animateInput(document.getElementById('input-def'));
   
   updateUI();
