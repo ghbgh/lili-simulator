@@ -121,7 +121,7 @@
 </head>
 <body>
 <div class="container">
-  <h2>莉莉回合制战斗游戏</h2>
+  <h2>莉莉回合制战斗模拟器</h2>
   <button class="refresh-btn" onclick="resetGame()">重置游戏</button>
   <div class="game-layout">
     <div class="top-layout">
@@ -141,10 +141,10 @@
               最大血量：<input type="number" id="input-maxhp" value="100" style="width:70px;text-align:center;font-size:16px;" step="1" onchange="setStat('maxHp')" oninput="animateInput(this)">
             </div>
             <div style="margin-top:3px;">
-              <button style="padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(-20)">-20</button>
-              <button style="margin-left:2px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(-5)">-5</button>
-              <button style="margin-left:8px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(5)">+5</button>
-              <button style="margin-left:2px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(20)">+20</button>
+              <button style="padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(-20)">-20🔗</button>
+              <button style="margin-left:2px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHpOnly(-5)">-5</button>
+              <button style="margin-left:8px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHpOnly(5)">+5</button>
+              <button style="margin-left:2px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(20)">+20🔗</button>
             </div>
             <div>
               当前血量：<input type="number" id="input-hp" value="100" style="width:70px;text-align:center;font-size:16px;" onchange="setStat('hp')" oninput="animateInput(this)">
@@ -153,7 +153,7 @@
               污秽等级：<input type="number" id="input-corruption" value="0" style="width:70px;text-align:center;font-size:16px;" onchange="setStat('corruption')" oninput="animateInput(this)">
             </div>
             <div id="remaining-corruption" style="color:#666;font-size:14px;margin-top:5px;">
-              剩余可增加污秽等级：<span id="remaining-corruption-value">59</span>
+              TE剩余可增加污秽等级：<span id="remaining-corruption-value">59</span>
             </div>
           </div>
           <button onclick="resetStats()" style="margin-top:10px;padding:8px 16px;background:#27ae60;color:white;border:none;border-radius:4px;cursor:pointer;">重置血量和祈祷</button>
@@ -208,17 +208,17 @@
         <label><input type="checkbox" id="opt-pray-amount" onchange="updateUI()"> 祈祷恢复量+10%（儿汝莉德的戒指）</label>
         <label><input type="checkbox" id="opt-pray-amount5" onchange="updateUI()"> 祈祷恢复量+5%（纯净清泉的圣水）</label>
         <label><input type="checkbox" id="opt-pray-amount-10" onchange="togglePrayDefense()"> 祈祷恢复量-10%，防御力+4（莉可丽丝的戒指）</label>
-        <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"> 祈祷次数上限+1，boss战开始祈祷次数回复至上限（白巫女娃娃）</label>
+        <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"> 祈祷次数上限+1（白巫女娃娃），祈祷提高4点最大HP（需手动修改）</label>
         <label><input type="checkbox" id="opt-earring" onchange="updateUI()"> 祈祷次数上限+1（白巫女耳环）</label>
         <label><input type="checkbox" id="opt-molili" onchange="toggleMoliliRing()"> 受到攻击时反弹防御力×1点伤害，防御+3（芙莉蒂雅的戒指）</label>
-        <label><input type="checkbox" id="opt-statue" onchange="updateUI()"> 祈祷使用次数上限+1（白巫女的雕像）</label>
+        <label><input type="checkbox" id="opt-statue" onchange="updateUI()"> 白巫女的雕像：祈祷使用次数上限+1，祈祷恢复生命时会对敌人造成恢复量一半的伤害（伤害计算防御）</label>
         <label><input type="checkbox" id="opt-glove" onchange="toggleGlove()"> 每回合攻击两次，攻击-5（执行人的手套）</label>
-        <label><input type="checkbox" id="opt-no-pray" onchange="updateUI()"> 不能使用祈祷</label>
-        <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"> 对守护者攻击力提高2点</label>
-        <label><input type="checkbox" id="opt-minion-atk" onchange="updateUI()"> 对小怪攻击力提高3点</label>
+        <label><input type="checkbox" id="opt-no-pray" onchange="updateUI()"> 不能使用祈祷（旧版道具）</label>
+        <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"> 对守护者攻击力提高2点（破损的音乐盒）</label>
+        <label><input type="checkbox" id="opt-minion-atk" onchange="updateUI()"> 对小怪攻击力提高3点（旧版道具）</label>
         <label><input type="checkbox" id="opt-restraint" onchange="toggleMagicChain()"> 首轮禁锢敌方使其不能攻击，防御+1（魔线脚链）</label>
         <label><input type="checkbox" id="opt-immunity" onchange="toggleImmunityDefense()"> 免疫非攻击类伤害，防御+3（雅若拉的戒指）</label>
-        <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"> 交换攻击和防御，攻击+2，防御+2</label>
+        <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"> 交换攻击和防御，攻击+2，防御+2（灵涡戒）</label>
       </div>
     </div>
   </div>
@@ -238,9 +238,9 @@ const bosses = [
   { atk: 80, def: 14, hp: 300, special: '每三回合攻击一次', drop: 7 },
   { atk: 28, def: 15, hp: 350, special: '每次受伤最高10点', drop: 8 },
   { atk: 44, def: 16, hp: 400, special: '无视50%防御', drop: 9 },
-  { atk: 35, def: 35, hp: 450, special: 'hp为0后受到5次攻击死亡', drop: 10 },
+  { atk: 35, def: 35, hp: 450, special: 'hp为0后受到5次攻击死亡(且此怪类型为污秽/小怪)', drop: 10 },
   { atk: 50, def: 35, hp: 600, special: '-', drop: '' },
-  { atk: 70, def: 40, hp: 600, special: '-', drop: '' }
+  { atk: 70, def: 40, hp: 600, special: '血量小于等于25%时不再攻击', drop: '' }
 ];
 const minions = [
   { atk: 8, def: 2, hp: 40, special: '' },
@@ -315,7 +315,30 @@ function adjustMaxHp(amount) {
   const newValue = Math.max(20, currentValue + amount);
   
   maxHpInput.value = newValue;
-  setStat('maxHp', true); // 使用动画效果
+  setStat('maxHp', true); // 使用动画效果，同时修改最大血量和当前血量
+}
+
+function adjustMaxHpOnly(amount) {
+  const maxHpInput = document.getElementById('input-maxhp');
+  const hpInput = document.getElementById('input-hp');
+  const currentMaxHp = parseInt(maxHpInput.value) || 20;
+  const newMaxHp = Math.max(20, currentMaxHp + amount);
+  
+  // 只修改最大血量，不影响当前血量
+  const oldMaxHp = lili.maxHp;
+  lili.maxHp = newMaxHp;
+  
+  // 确保当前血量不超过新的最大血量
+  if (lili.hp > lili.maxHp) {
+    lili.hp = lili.maxHp;
+    hpInput.value = lili.hp;
+    animateInput(hpInput);
+  }
+  
+  maxHpInput.value = newMaxHp;
+  animateInput(maxHpInput);
+  
+  updateUI();
 }
 
 function animateStatChange(element) {
@@ -566,6 +589,7 @@ function updateBossIndicators() {
   const optGlove = document.getElementById('opt-glove').checked;
   const optNoPray = document.getElementById('opt-no-pray').checked;
   const optBossAtk = document.getElementById('opt-boss-atk').checked;
+  const optMinionAtk = document.getElementById('opt-minion-atk').checked;
   const optRestraint = document.getElementById('opt-restraint').checked;
   const optImmunity = document.getElementById('opt-immunity').checked;
 
@@ -591,7 +615,7 @@ function updateBossIndicators() {
       maxHp: lili.maxHp,
       hp: lili.maxHp, // 用满血计算
       pray: prayMax // 用满祈祷次数计算
-    }, bosses[i], i, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optEarring, optNoPray, optBossAtk, optRestraint, optImmunity});
+    }, bosses[i], i, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optEarring, optNoPray, optBossAtk, optMinionAtk, optRestraint, optImmunity});
     
     // 设置颜色
     if (result.win) {
@@ -851,14 +875,16 @@ function updateUI() {
     maxHp: lili.maxHp,
     hp: lili.hp,
     pray: lili.pray
-  }, boss, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optEarring, optNoPray, optBossAtk, optRestraint, optImmunity});
+  }, boss, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optPrayCount, optEarring, optNoPray, optBossAtk, optMinionAtk, optRestraint, optImmunity});
   
   if (result.win) {
     document.getElementById('battle-result').innerHTML = '<span class="victory-text">胜利！</span>';
   } else {
     document.getElementById('battle-result').innerHTML = '<span class="defeat-text">失败！</span>';
   }
-  document.getElementById('hp-consumed').textContent = `剩余血量：${result.remainingHp}，剩余祈祷次数：${result.remainingPray}`;
+  const totalConsumed = result.totalHpConsumed || (lili.hp - result.remainingHp);
+  const hpChange = lili.hp - result.remainingHp;
+  document.getElementById('hp-consumed').innerHTML = `血量变化：${hpChange}<br>剩余血量：${result.remainingHp}<br>剩余祈祷次数：${result.remainingPray}`;
   document.getElementById('damage-log').textContent = result.damageLog.join('\n');
   
   // 自动更新小怪预测（用当前血量和祈祷次数）
@@ -871,8 +897,11 @@ function updateUI() {
       pray: lili.pray
     }, minion, bossIdx, {prayAmount, prayMax, atkTimes, optMolili, optStatue, optEarring, optNoPray, optMinionAtk, optRestraint, optImmunity});
     if (minionResult.win) {
-      const hpConsumed = lili.hp - minionResult.finalHp;
-      document.getElementById('minion-predict').innerHTML = '<span class="victory-text">预测：胜利</span>，消耗血量' + hpConsumed;
+      const hpConsumed = Math.max(0, lili.hp - minionResult.finalHp);
+      // 安全击杀数用boss战斗后的剩余血量计算：(boss战后剩余血量-1) / 每只小怪消耗血量
+      const safeKillCount = hpConsumed > 0 ? Math.floor((result.remainingHp - 1) / hpConsumed) : Infinity;
+      const safeKillDisplay = safeKillCount < 1 ? '<span class="defeat-text">' + (safeKillCount === Infinity ? '∞' : safeKillCount) + '</span>' : (safeKillCount === Infinity ? '∞' : safeKillCount);
+      document.getElementById('minion-predict').innerHTML = '<span class="victory-text">预测：胜利</span><br>消耗血量：' + hpConsumed + '<br>剩余安全击杀数：' + safeKillDisplay;
     } else {
       document.getElementById('minion-predict').innerHTML = '<span class="defeat-text">预测：失败</span>';
     }
@@ -890,11 +919,18 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
   let liliAtk = lili.atk;
   let liliDef = lili.def;
   
-  if (opts.optBossAtk) liliAtk += 2;
+  if (bossBattleIdx === 7) {
+    // 第8只boss特殊：被视为小怪，使用小怪攻击增强
+    if (opts.optMinionAtk) liliAtk += 3;
+  } else {
+    // 其他boss使用守护者攻击增强
+    if (opts.optBossAtk) liliAtk += 2;
+  }
   let bossAtk = boss.atk;
   let round = 1;
   let bossSpecial = boss.special;
   let hpConsumed = 0;
+  let totalHpConsumed = 0; // 总消耗血量，包括祈祷恢复后又减去的血量
   let bossAlive = true;
   let liliAlive = true;
   let bossAtkInc = 0;
@@ -908,12 +944,25 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
   let optNoPray = opts.optNoPray;
   let optRestraint = opts.optRestraint;
   let optImmunity = opts.optImmunity;
+  let optMinionAtk = opts.optMinionAtk;
   let damageLog = [];
-  
-  // 白巫女娃娃效果：与守护者战斗开始时祈祷次数回复至上限
-  if (optPrayCount) prayCount = opts.prayMax || 4;
-  
+
   while (liliAlive && bossAlive && round < 1000) {
+    // 回合开始时的祈祷技能
+    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
+      let heal = Math.floor(lili.maxHp * prayAmount);
+      liliHp += heal;
+      prayCount--;
+      // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
+      if (optStatue) {
+        let statueDmg = Math.max(1, Math.floor(heal / 2) - boss.def);
+        bossHp -= statueDmg;
+        if (round <= 30) damageLog.push(`第${round}轮开始：莉莉触发祈祷，恢复${heal}点生命，雕像效果对Boss造成${statueDmg}点伤害`);
+      } else {
+        if (round <= 30) damageLog.push(`第${round}轮开始：莉莉触发祈祷，恢复${heal}点生命`);
+      }
+    }
+    
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
       let liliDmg = Math.max(1, liliAtk - boss.def);
@@ -921,8 +970,6 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
       if (bossBattleIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
       if (round <= 30) damageLog.push(`第${round}轮：莉莉对Boss造成${liliDmg}点伤害`);
-      // boss特殊：每次攻击增加自生atk一点
-      if (bossBattleIdx === 1 && bossHp > 0) bossAtk++;
       // boss特殊：hp为0后受到5次攻击死亡
       if (bossBattleIdx === 7 && bossHp <= 0) {
         bossDeathDelay++;
@@ -936,17 +983,32 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
     // boss特殊：每回合移除对方12hp
     if (bossBattleIdx === 3 && bossAlive && !optImmunity) {
       liliHp -= 12;
+      totalHpConsumed += 12; // 记录总消耗血量
       if (round <= 30) damageLog.push(`第${round}轮：Boss特殊移除莉莉12点生命`);
     } else if (bossBattleIdx === 3 && bossAlive && optImmunity && round <= 30) {
       damageLog.push(`第${round}轮：Boss特殊攻击被免疫无效`);
     }
     
-    // boss特殊：每三回合攻击一次
+    // boss特殊：每三回合攻击一次（禁锢会跳过第一次攻击）
     let bossAttackThisRound = true;
-    if (bossBattleIdx === 4) bossAttackThisRound = (round % 3 === 0);
+    if (bossBattleIdx === 4) {
+      if (opts.optRestraint) {
+        // 有禁锢效果时，跳过第3回合的攻击，从第6回合开始：第6、9、12回合攻击
+        bossAttackThisRound = (round % 3 === 0 && round > 3);
+      } else {
+        // 没有禁锢效果时，正常周期：第3、6、9回合攻击
+        bossAttackThisRound = (round % 3 === 0);
+      }
+    }
     
     // boss特殊：每回合攻击两次
     let bossAttackTimes = (bossBattleIdx === 2) ? 2 : 1;
+    
+    // 第十只boss特殊：血量小于等于25%时不再攻击
+    if (bossBattleIdx === 9 && bossHp <= boss.hp * 0.25) {
+      bossAttackTimes = 0;
+      if (round <= 30) damageLog.push(`第${round}轮：Boss血量低于25%，停止攻击`);
+    }
     
     for (let i = 0; i < bossAttackTimes; i++) {
       if (bossAlive && bossAttackThisRound && !(opts.optRestraint && round === 1)) {
@@ -956,6 +1018,7 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
         let bossDmg = Math.max(1, bossAtk - def);
         liliHp -= bossDmg;
         hpConsumed += bossDmg;
+        totalHpConsumed += bossDmg; // 记录总消耗血量
         if (round <= 30) damageLog.push(`第${round}轮：Boss对莉莉造成${bossDmg}点伤害`);
         
         // 莫莉莉的戒指效果：反弹防御力伤害
@@ -965,34 +1028,38 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
           if (round <= 30) damageLog.push(`第${round}轮：莫莉莉的戒指反弹${reflect}点伤害给Boss`);
         }
         
-        // 祈祷技能
-        if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
-          let heal = Math.floor(lili.maxHp * prayAmount);
-          liliHp += heal;
-          prayCount--;
-          if (round <= 30) damageLog.push(`第${round}轮：莉莉触发祈祷，恢复${heal}点生命`);
-          
-          // 白巫女的雕像效果已移除
-        }
-        
         if (liliHp <= 0) liliAlive = false;
       }
     }
+    
+    // boss特殊：每次攻击后增加自身atk一点（但受到魔线脚链影响时不增加）
+    if (bossBattleIdx === 1 && bossAlive && !(opts.optRestraint && round === 1)) {
+      bossAtk++;
+      if (round <= 30) damageLog.push(`第${round}轮：Boss攻击力增加1点，当前攻击力${bossAtk}`);
+    }
+    
     round++;
   }
   
-  return { win: bossAlive === false && liliAlive, remainingHp: liliHp, remainingPray: prayCount, damageLog: damageLog };
+  return { win: bossAlive === false && liliAlive, remainingHp: liliHp, remainingPray: prayCount, totalHpConsumed: totalHpConsumed, damageLog: damageLog };
 }
 
 function battleResult(lili, boss, opts={}) {
   let liliHp = lili.hp; // 使用当前血量而不是最大血量
   let bossHp = boss.hp;
   let liliAtk = lili.atk;
-  if (opts.optBossAtk) liliAtk += 2; // 对boss攻击力+2
+  if (bossIdx === 7) {
+    // 第8只boss特殊：被视为小怪，使用小怪攻击增强
+    if (opts.optMinionAtk) liliAtk += 3;
+  } else {
+    // 其他boss使用守护者攻击增强
+    if (opts.optBossAtk) liliAtk += 2; // 对boss攻击力+2
+  }
   let bossAtk = boss.atk;
   let round = 1;
   let bossSpecial = boss.special;
   let hpConsumed = 0;
+  let totalHpConsumed = 0; // 总消耗血量，包括祈祷恢复后又减去的血量
   let bossAlive = true;
   let liliAlive = true;
   let bossAtkInc = 0;
@@ -1006,12 +1073,25 @@ function battleResult(lili, boss, opts={}) {
   let optNoPray = opts.optNoPray;
   let optRestraint = opts.optRestraint;
   let optImmunity = opts.optImmunity;
+  let optMinionAtk = opts.optMinionAtk;
   let damageLog = [];
-  
-  // 白巫女娃娃效果：与守护者战斗开始时祈祷次数回复至上限
-  if (optPrayCount) prayCount = opts.prayMax || 4;
-  
+
   while (liliAlive && bossAlive && round < 1000) {
+    // 回合开始时的祈祷技能
+    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
+      let heal = Math.floor(lili.maxHp * prayAmount);
+      liliHp += heal;
+      prayCount--;
+      // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
+      if (optStatue) {
+        let statueDmg = Math.max(1, Math.floor(heal / 2) - boss.def);
+        bossHp -= statueDmg;
+        if (round <= 30) damageLog.push(`第${round}轮开始：莉莉触发祈祷，恢复${heal}点生命，雕像效果对Boss造成${statueDmg}点伤害`);
+      } else {
+        if (round <= 30) damageLog.push(`第${round}轮开始：莉莉触发祈祷，恢复${heal}点生命`);
+      }
+    }
+    
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
       let liliDmg = Math.max(1, liliAtk - boss.def);
@@ -1019,8 +1099,6 @@ function battleResult(lili, boss, opts={}) {
       if (bossIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
       if (round <= 30) damageLog.push(`第${round}轮：莉莉对Boss造成${liliDmg}点伤害`);
-      // boss特殊：每次攻击增加自生atk一点
-      if (bossIdx === 1 && bossHp > 0) bossAtk++;
       // boss特殊：hp为0后受到5次攻击死亡
       if (bossIdx === 7 && bossHp <= 0) {
         bossDeathDelay++;
@@ -1034,17 +1112,32 @@ function battleResult(lili, boss, opts={}) {
     // boss特殊：每回合移除对方12hp
     if (bossIdx === 3 && bossAlive && !optImmunity) {
       liliHp -= 12;
+      totalHpConsumed += 12; // 记录总消耗血量
       if (round <= 30) damageLog.push(`第${round}轮：Boss特殊移除莉莉12点生命`);
     } else if (bossIdx === 3 && bossAlive && optImmunity && round <= 30) {
       damageLog.push(`第${round}轮：Boss特殊攻击被免疫无效`);
     }
     
-    // boss特殊：每三回合攻击一次
+    // boss特殊：每三回合攻击一次（禁锢会跳过第一次攻击）
     let bossAttackThisRound = true;
-    if (bossIdx === 4) bossAttackThisRound = (round % 3 === 0);
+    if (bossIdx === 4) {
+      if (optRestraint) {
+        // 有禁锢效果时，跳过第3回合的攻击，从第6回合开始：第6、9、12回合攻击
+        bossAttackThisRound = (round % 3 === 0 && round > 3);
+      } else {
+        // 没有禁锢效果时，正常周期：第3、6、9回合攻击
+        bossAttackThisRound = (round % 3 === 0);
+      }
+    }
     
     // boss特殊：每回合攻击两次
     let bossAttackTimes = (bossIdx === 2) ? 2 : 1;
+    
+    // 第十只boss特殊：血量小于等于25%时不再攻击
+    if (bossIdx === 9 && bossHp <= boss.hp * 0.25) {
+      bossAttackTimes = 0;
+      if (round <= 30) damageLog.push(`第${round}轮：Boss血量低于25%，停止攻击`);
+    }
     
     for (let i = 0; i < bossAttackTimes; i++) {
       if (bossAlive && bossAttackThisRound && !(optRestraint && round === 1)) { // 禁锢时敌方首轮不能攻击
@@ -1054,6 +1147,7 @@ function battleResult(lili, boss, opts={}) {
         let bossDmg = Math.max(1, bossAtk - def);
         liliHp -= bossDmg;
         hpConsumed += bossDmg;
+        totalHpConsumed += bossDmg; // 记录总消耗血量
         if (round <= 30) damageLog.push(`第${round}轮：Boss对莉莉造成${bossDmg}点伤害`);
         
         // 莫莉莉的戒指效果：反弹防御力伤害
@@ -1063,23 +1157,20 @@ function battleResult(lili, boss, opts={}) {
           if (round <= 30) damageLog.push(`第${round}轮：莫莉莉的戒指反弹${reflect}点伤害给Boss`);
         }
         
-        // 祈祷技能
-        if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
-          let heal = Math.floor(lili.maxHp * prayAmount);
-          liliHp += heal;
-          prayCount--;
-          if (round <= 30) damageLog.push(`第${round}轮：莉莉触发祈祷，恢复${heal}点生命`);
-          
-          // 白巫女的雕像效果已移除
-        }
-        
         if (liliHp <= 0) liliAlive = false;
       }
     }
+    
+    // boss特殊：每次攻击后增加自身atk一点（但受到魔线脚链影响时不增加）
+    if (bossIdx === 1 && bossAlive && !(optRestraint && round === 1)) {
+      bossAtk++;
+      if (round <= 30) damageLog.push(`第${round}轮：Boss攻击力增加1点，当前攻击力${bossAtk}`);
+    }
+    
     round++;
   }
   
-  return { win: bossAlive === false && liliAlive, remainingHp: liliHp, remainingPray: prayCount, damageLog: damageLog };
+  return { win: bossAlive === false && liliAlive, remainingHp: liliHp, remainingPray: prayCount, totalHpConsumed: totalHpConsumed, damageLog: damageLog };
 }
 
 function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
@@ -1103,6 +1194,18 @@ function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
   let optImmunity = opts.optImmunity;
   
   while (liliAlive && minionAlive && round < 1000) {
+    // 回合开始时的祈祷技能
+    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
+      let heal = Math.floor(lili.maxHp * prayAmount);
+      liliHp += heal;
+      prayCount--;
+      // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
+      if (optStatue) {
+        let statueDmg = Math.max(1, Math.floor(heal / 2) - minion.def);
+        minionHp -= statueDmg;
+      }
+    }
+    
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
       let liliDmg = Math.max(1, liliAtk - minion.def);
@@ -1127,15 +1230,6 @@ function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
       if (opts.optMolili && minionDmg > 0) {
         let reflect = Math.max(1, liliDef - minion.def);
         minionHp -= reflect;
-      }
-      
-      // 祈祷技能
-      if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
-        let heal = Math.floor(lili.maxHp * prayAmount);
-        liliHp += heal;
-        prayCount--;
-        
-        // 白巫女的雕像效果已移除
       }
       
       if (liliHp <= 0) liliAlive = false;
