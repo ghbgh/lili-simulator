@@ -1270,6 +1270,8 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
       // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
       if (optStatue) {
         let statueDmg = Math.max(1, Math.floor(heal / 2) - boss.def);
+        // boss特殊：每次受伤最高10点
+        if (bossBattleIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
         if (round <= 30) damageLog.push(`${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命，雕像效果对Boss造成${statueDmg}点伤害`);
       } else {
@@ -1277,13 +1279,15 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
       }
     }
     
-    // boss特殊：每回合移除对方12hp
-    if (bossBattleIdx === 3 && bossAlive && !optImmunity) {
+    // boss特殊：每回合移除对方12hp（禁锢时第一回合不生效）
+    if (bossBattleIdx === 3 && bossAlive && !optImmunity && !(opts.optRestraint && round === 1)) {
       liliHp -= 12;
       totalHpConsumed += 12; // 记录总消耗血量
       if (round <= 30) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
-    } else if (bossBattleIdx === 3 && bossAlive && optImmunity && round <= 30) {
+    } else if (bossBattleIdx === 3 && bossAlive && optImmunity && !(opts.optRestraint && round === 1) && round <= 30) {
       damageLog.push(`${round}:Boss特殊攻击被免疫无效`);
+    } else if (bossBattleIdx === 3 && bossAlive && opts.optRestraint && round === 1 && round <= 30) {
+      damageLog.push(`${round}:Boss被禁锢，特殊效果被阻止`);
     }
     
     // boss特殊：每三回合攻击一次（禁锢会跳过第一次攻击）
@@ -1321,6 +1325,8 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
         // 芙莉蒂雅的戒指效果：反弹防御力伤害
         if (opts.optMolili && bossDmg > 0) {
           let reflect = Math.max(1, liliDef - boss.def);
+          // boss特殊：每次受伤最高10点
+          if (bossBattleIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
           if (round <= 30) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
         }
@@ -1404,6 +1410,8 @@ function battleResult(lili, boss, opts={}) {
       // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
       if (optStatue) {
         let statueDmg = Math.max(1, Math.floor(heal / 2) - boss.def);
+        // boss特殊：每次受伤最高10点
+        if (bossIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
         if (round <= 30) damageLog.push(`${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命，雕像效果对Boss造成${statueDmg}点伤害`);
       } else {
@@ -1411,13 +1419,15 @@ function battleResult(lili, boss, opts={}) {
       }
     }
     
-    // boss特殊：每回合移除对方12hp
-    if (bossIdx === 3 && bossAlive && !optImmunity) {
+    // boss特殊：每回合移除对方12hp（禁锢时第一回合不生效）
+    if (bossIdx === 3 && bossAlive && !optImmunity && !(optRestraint && round === 1)) {
       liliHp -= 12;
       totalHpConsumed += 12; // 记录总消耗血量
       if (round <= 30) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
-    } else if (bossIdx === 3 && bossAlive && optImmunity && round <= 30) {
+    } else if (bossIdx === 3 && bossAlive && optImmunity && !(optRestraint && round === 1) && round <= 30) {
       damageLog.push(`${round}:Boss特殊攻击被免疫无效`);
+    } else if (bossIdx === 3 && bossAlive && optRestraint && round === 1 && round <= 30) {
+      damageLog.push(`${round}:Boss被禁锢，特殊效果被阻止`);
     }
     
     // boss特殊：每三回合攻击一次（禁锢会跳过第一次攻击）
@@ -1455,6 +1465,8 @@ function battleResult(lili, boss, opts={}) {
         // 莫莉莉的戒指效果：反弹防御力伤害
         if (optMolili && bossDmg > 0) {
           let reflect = Math.max(1, lili.def - boss.def);
+          // boss特殊：每次受伤最高10点
+          if (bossIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
           if (round <= 30) damageLog.push(`${round}:莫莉莉的戒指反弹${reflect}点伤害给Boss`);
         }
