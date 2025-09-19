@@ -8,7 +8,7 @@ This project is a browser-based turn-based battle game featuring a protagonist (
   - Lili (player): Has `atk`, `def`, `maxHp`, `hp`, and `prayUsed` attributes. All stats are editable via custom arrow-controlled input fields with real-time 面板同步.
   - Bosses: Array of 10 objects, each with `atk`, `def`, `hp`, `special`, and `drop` attributes. Special rules affect battle logic.
   - Minions: Array of 10 objects corresponding to each boss, with `atk`, `def`, `hp`, and `special` attributes.
-  - Enhancement System: 13 visible checkbox-based options that modify Lili's abilities and battle mechanics with immediate UI feedback (2 legacy options hidden).
+  - Enhancement System: 16 visible checkbox-based options that modify Lili's abilities and battle mechanics with immediate UI feedback (2 legacy options hidden). Includes new equipment options with stat modifications and corruption mechanics.
   - Boss Indicator System: Visual circular dots (2x5 grid) showing win/loss predictions for all bosses with color-coded feedback and numeric displays.
   - Corruption Level System: Progressive difficulty tracking with automatic updates, remaining corruption display, and color-coded warnings.
   - Point Allocation System: Intelligent suggestions for stat improvements when battles fail, supporting up to 50-point allocations.
@@ -45,6 +45,9 @@ This project is a browser-based turn-based battle game featuring a protagonist (
   - 魔线脚链：首轮禁锢敌方，不能发动攻击，防御+1 (with 面板同步)
   - 雅若拉的戒指：免疫非攻击类伤害，防御+3 (with 面板同步)
   - 交换攻击和防御，攻击+2，防御+2 (with 面板同步)
+  - 腐朽的王冠：攻击+4，防御+4，污秽残渣获取率-40% (with 面板同步)
+  - 血染的蝴蝶结：攻击+4，生命上限-20 (with 面板同步)
+  - 七彩羽毛头饰：攻击+2，防御+2，生命上限+40 (with 面板同步)
 
 ## UI Features
 - **Enhanced Input Controls:** Custom left/right arrow buttons for stat adjustment with immediate visual feedback and compact layout
@@ -54,9 +57,11 @@ This project is a browser-based turn-based battle game featuring a protagonist (
 - **Real-time Battle Predictions:** Enhanced with blood change calculations and remaining prayer counts
 - **Point Allocation Suggestions:** Intelligent recommendations for stat improvements when battles fail (up to 50 points)
 - **Minion Challenges:** Separate system for fighting minions that preserves HP state and increases corruption
-- **Compact Layout:** Optimized spacing and sizing for better visual density
+- **Compact Layout:** Optimized spacing and sizing for better visual density with reduced line spacing (5px gap)
 - **Battle Log Formatting:** Simplified round indicators (from "第x轮：" to "x:") for cleaner readability
 - **Prayer System Tracking:** Records used prayers internally while displaying remaining count to users
+- **Equipment Interaction:** Enhanced click targets - both checkbox and equipment text are clickable for easier interaction
+- **Equipment Name Styling:** Color-coded equipment names with deeper background colors for better contrast and visual hierarchy
 - **Reset Functions:** 
   - "重置血量和祈祷" resets HP to max and prayer usage, respecting current enhancement bonuses
   - Located in Lili attributes section for logical grouping
@@ -75,11 +80,13 @@ This project is a browser-based turn-based battle game featuring a protagonist (
 
 ## Project-Specific Patterns
 - **Enhancement Options:**
-  - 13 visible enhancement options in two-column layout with proper text wrapping
+  - 16 visible enhancement options in two-column layout with proper text wrapping and compact 5px spacing
   - 2 legacy options hidden but functional for backward compatibility
   - All enhancement effects are implemented as checkbox-controlled boolean flags
   - Enhancement states are read in real-time during battle calculations
   - Equipment enhancements with 面板同步 use toggle functions for immediate stat updates
+  - Equipment names with color-coded backgrounds (orange, purple, blue, green) for visual categorization
+  - Clickable equipment text and checkbox for improved user interaction
 
 - **Battle Calculations:**
   - `battleResult()` function handles boss battles with current HP and prayer state
@@ -151,6 +158,18 @@ This project is a browser-based turn-based battle game featuring a protagonist (
 - Update boss indicators and corruption display whenever game state changes
 
 ## Recent Updates
+- **New Equipment Additions:**
+  - Added three new equipment pieces: 腐朽的王冠 (blue), 血染的蝴蝶结 (purple), 七彩羽毛头饰 (orange)
+  - Implemented toggleCorruptedCrown(), toggleBloodyRibbon(), toggleRainbowFeather() functions
+  - Added proper stat modification and visual feedback for all new equipment
+- **Equipment Visual Enhancements:**
+  - Deepened orange and green background colors for better contrast
+  - Enhanced equipment name styling with color-coded backgrounds
+  - Improved visual hierarchy and readability
+- **UI Interaction Improvements:**
+  - Reduced enhancement line spacing from 10px to 5px for compact layout
+  - Enabled label text clicking for all enhancement options
+  - Removed complex focus management while keeping simple click interactions
 - **Battle Section Width:** Expanded to 1.8x for better battle log visibility
 - **Battle Log Format:** Simplified from "第x轮：" to "x:" for cleaner readability
 - **Prayer System Overhaul:** 
@@ -166,6 +185,7 @@ This project is a browser-based turn-based battle game featuring a protagonist (
   - Enhanced visual feedback and compact alignment
   - Added tooltips for HP adjustment buttons
 - **Enhancement System Reorganization:**
+  - Expanded from 13 to 16 visible enhancement options
   - Hidden 2 legacy options while maintaining functionality
   - Reorganized into left/right column layout with proper text wrapping
   - Improved visual hierarchy and readability

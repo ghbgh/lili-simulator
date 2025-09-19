@@ -36,6 +36,63 @@
       margin-right: 8px;
       margin-top: 2px;
       flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      transform: scale(1.3);
+      pointer-events: auto;
+    }
+    
+    /* 装备名背景样式 */
+    .equipment-name {
+      background-color: #2E7D32;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .equipment-name.orange {
+      background-color: #F57C00;
+    }
+    .equipment-name.purple {
+      background-color: #9C27B0;
+    }
+    .equipment-name.blue {
+      background-color: #2196F3;
+    }
+    
+    /* 禁止label文本点击 */
+    .relics-section label {
+      pointer-events: none;
+    }
+    
+    /* 装备名背景样式 */
+    .equipment-name {
+      background-color: #2E7D32;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .equipment-name.orange {
+      background-color: #F57C00;
+    }
+    .equipment-name.purple {
+      background-color: #9C27B0;
+    }
+    .equipment-name.blue {
+      background-color: #2196F3;
+    }
+    
+    /* 允许label文字点击 */
+    .relics-section label {
+      pointer-events: auto;
+    }
+    .relics-section input[type="checkbox"] {
+      pointer-events: auto;
     }
     
     .relics-section label > span,
@@ -404,26 +461,32 @@
     <!-- 强化选项区域 -->
     <div class="relics-section">
       <div class="section-title">特殊遗物强化</div>
-      <div style="display: flex; gap: 20px; margin-top: 10px;">
+      <div style="display: flex; gap: 20px; margin-top: 5px;">
         <!-- 左列 -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
-          <label><input type="checkbox" id="opt-pray-amount" onchange="updateUI()"><span>（儿汝莉德的戒指）祈祷恢复量+10%</span></label>
-          <label><input type="checkbox" id="opt-pray-amount5" onchange="updateUI()"><span>（纯净清泉的圣水）祈祷恢复量+5%</span></label>
-          <label><input type="checkbox" id="opt-pray-amount-10" onchange="togglePrayDefense()"><span>（莉可丽丝的戒指）祈祷恢复量-10%，防御力+4</span></label>
-          <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"><span>（白巫女娃娃）祈祷次数上限+1（特殊效果：祈祷提高4点最大HP，需手动修改）</span></label>
-          <label><input type="checkbox" id="opt-earring" onchange="updateUI()"><span>（白巫女耳环）祈祷次数上限+1</span></label>
-          <label><input type="checkbox" id="opt-statue" onchange="updateUI()"><span>（白巫女的雕像）祈祷次数上限+1，祈祷恢复生命时会对敌人造成恢复量一半的伤害（伤害计算防御）</span></label>
-          <label><input type="checkbox" id="opt-molili" onchange="toggleMoliliRing()"><span>（芙莉蒂雅的戒指）受到攻击时反弹防御力×1点伤害，防御+3</span></label>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+          <label><input type="checkbox" id="opt-pray-amount" onchange="updateUI()"><span><span class="equipment-name purple">（儿汝莉德的戒指）</span>祈祷恢复量+10%</span></label>
+          <label><input type="checkbox" id="opt-pray-amount5" onchange="updateUI()"><span><span class="equipment-name">（纯净清泉的圣水）</span>祈祷恢复量+5%</span></label>
+          <label><input type="checkbox" id="opt-pray-amount-10" onchange="togglePrayDefense()"><span><span class="equipment-name purple">（莉可丽丝的戒指）</span>祈祷恢复量-10%，防御力+4</span></label>
+          <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"><span><span class="equipment-name orange">（白巫女娃娃）</span>祈祷次数上限+1（特殊效果：祈祷提高4点最大HP，需手动修改）</span></label>
+          <label><input type="checkbox" id="opt-earring" onchange="updateUI()"><span><span class="equipment-name blue">（白巫女耳环）</span>祈祷次数上限+1</span></label>
+          <label><input type="checkbox" id="opt-statue" onchange="updateUI()"><span><span class="equipment-name orange">（白巫女的雕像）</span>祈祷次数上限+1，祈祷恢复生命时会对敌人造成恢复量一半的伤害（伤害计算防御）</span></label>
+          <label><input type="checkbox" id="opt-molili" onchange="toggleMoliliRing()"><span><span class="equipment-name orange">（芙莉蒂雅的戒指）</span>受到攻击时反弹防御力×1点伤害，防御+3</span></label>
+          <label><input type="checkbox" id="opt-corrupted-crown" onchange="toggleCorruptedCrown()"><span><span class="equipment-name blue">（腐朽的王冠）</span>攻击+4，防御+4，污秽残渣获取率-40%</span></label>
+          <label><input type="checkbox" id="opt-bloody-ribbon" onchange="toggleBloodyRibbon()"><span><span class="equipment-name purple">（血染的蝴蝶结）</span>攻击+4，生命上限-20</span></label>
+          <label><input type="checkbox" id="opt-rainbow-feather" onchange="toggleRainbowFeather()"><span><span class="equipment-name orange">（七彩羽毛头饰）</span>攻击+2，防御+2，生命上限+40</span></label>
         </div>
         <!-- 右列 -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
-          <label><input type="checkbox" id="opt-glove" onchange="toggleGlove()"><span>（执行人的手套）每回合攻击两次，攻击-5</span></label>
-          <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"><span>（破损的音乐盒）对守护者攻击力提高2点</span></label>
-          <label><input type="checkbox" id="opt-restraint" onchange="toggleMagicChain()"><span>（魔线脚链）首轮禁锢敌方使其不能攻击，防御+1</span></label>
-          <label><input type="checkbox" id="opt-immunity" onchange="toggleImmunityDefense()"><span>（雅若拉的戒指）免疫非攻击类伤害，防御+3</span></label>
-          <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"><span>（灵涡戒）交换攻击和防御，攻击+2，防御+2</span></label>
-          <label><input type="checkbox" id="opt-dragon-claw" onchange="toggleDragonClaw()"><span>（古龙爪）减少50%防御并增加两倍减少的值到攻击力</span></label>
-          <label><input type="checkbox" id="opt-no-rest" onchange="updateUI()" checked><span>（0918 BUG）第十个boss前无休息</span></label>
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+          <label><input type="checkbox" id="opt-glove" onchange="toggleGlove()"><span><span class="equipment-name orange">（执行人的手套）</span>每回合攻击两次，攻击-5</span></label>
+          <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"><span><span class="equipment-name purple">（破损的音乐盒）</span>对守护者攻击力提高2点</span></label>
+          <label><input type="checkbox" id="opt-restraint" onchange="toggleMagicChain()"><span><span class="equipment-name">（魔线脚链）</span>首轮禁锢敌方使其不能攻击，防御+1</span></label>
+          <label><input type="checkbox" id="opt-immunity" onchange="toggleImmunityDefense()"><span><span class="equipment-name purple">（雅若拉的戒指）</span>免疫非攻击类伤害，防御+3</span></label>
+          <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"><span><span class="equipment-name purple">（灵涡戒）</span>交换攻击和防御，攻击+2，防御+2</span></label>
+          <label><input type="checkbox" id="opt-dragon-claw" onchange="toggleDragonClaw()"><span><span class="equipment-name orange">（古龙爪）</span>减少50%防御并增加两倍减少的值到攻击力</span></label>
+          <label><input type="checkbox" id="opt-no-rest" onchange="updateUI()"><span><span class="equipment-name orange">（传送魔石）</span>boss前修整（最终boss前可恢复）</span></label>
+          <label><input type="checkbox" id="opt-corruption-atk" onchange="toggleCorruptionAtk()"><span><span class="equipment-name purple">（污秽的幻影）</span>攻击力+污秽等级×0.1</span></label>
+          <label><input type="checkbox" id="opt-corruption-def" onchange="toggleCorruptionDef()"><span><span class="equipment-name purple">（王之盾的徽章）</span>防御力+污秽等级×0.1</span></label>
+          <label><input type="checkbox" id="opt-corruption-hp" onchange="toggleCorruptionHp()"><span><span class="equipment-name purple">（脏污的银念珠）</span>生命值上限+污秽等级×1</span></label>
         </div>
         <!-- 隐藏旧版道具 -->
         <div style="display: none;">
@@ -501,7 +564,15 @@ function setStat(type, animate = false) {
     lili.hp = Math.max(1, Math.min(lili.hp + hpDiff, lili.maxHp));
   }
   if (type === 'hp') lili.hp = Math.max(1, Math.min(val, lili.maxHp));
-  if (type === 'corruption') lili.corruption = Math.max(0, val);
+  if (type === 'corruption') {
+    const oldCorruption = lili.corruption;
+    lili.corruption = Math.max(0, val);
+    
+    // 当污秽等级改变时，重新应用所有已勾选的污秽装备效果
+    if (oldCorruption !== lili.corruption) {
+      updateCorruptionEffects(oldCorruption, lili.corruption);
+    }
+  }
   
   // 如果需要动画效果
   if (animate) {
@@ -645,7 +716,13 @@ function resetGame() {
   document.getElementById('opt-immunity').checked = false;
   document.getElementById('opt-swap-atk-def').checked = false;
   document.getElementById('opt-dragon-claw').checked = false;
-  document.getElementById('opt-no-rest').checked = true;
+  document.getElementById('opt-no-rest').checked = false;
+  document.getElementById('opt-corruption-atk').checked = false;
+  document.getElementById('opt-corruption-def').checked = false;
+  document.getElementById('opt-corruption-hp').checked = false;
+  document.getElementById('opt-corrupted-crown').checked = false;
+  document.getElementById('opt-bloody-ribbon').checked = false;
+  document.getElementById('opt-rainbow-feather').checked = false;
   document.getElementById('opt-earring').checked = false;
   
   // 直接设置输入框的值为初始值
@@ -690,13 +767,31 @@ function prevBoss() {
   bossIdx = (bossIdx + bosses.length - 1) % bosses.length;
   const oldCorruption = lili.corruption;
   
-  // 根据Boss变化调整污秽等级（每个Boss相当于5点污秽）
+  // 根据Boss变化调整污秽等级
   const bossChange = bossIdx - oldBossIdx;
-  lili.corruption = Math.max(0, lili.corruption + bossChange * 5);
+  let corruptionChange = 0;
+  
+  // 计算污秽等级变化
+  if (bossChange > 0) { // 向前切换
+    for (let i = oldBossIdx; i < bossIdx; i++) {
+      if (i < 8) corruptionChange += 5; // boss1-8每个5点
+      if (i === 7) corruptionChange += 1; // boss8额外+1点
+      // boss9,10不增加污秽等级
+    }
+  } else if (bossChange < 0) { // 向后切换
+    for (let i = bossIdx; i < oldBossIdx; i++) {
+      if (i < 8) corruptionChange -= 5; // boss1-8每个-5点
+      if (i === 7) corruptionChange -= 1; // boss8额外-1点
+      // boss9,10不减少污秽等级
+    }
+  }
+  
+  lili.corruption = Math.max(0, lili.corruption + corruptionChange);
   
   // 如果污秽等级发生变化，显示动画
   if (oldCorruption !== lili.corruption) {
     animateInput(document.getElementById('input-corruption'));
+    updateCorruptionEffects(oldCorruption, lili.corruption);
   }
   
   updateUI();
@@ -707,13 +802,31 @@ function nextBoss() {
   bossIdx = (bossIdx + 1) % bosses.length;
   const oldCorruption = lili.corruption;
   
-  // 根据Boss变化调整污秽等级（每个Boss相当于5点污秽）
+  // 根据Boss变化调整污秽等级
   const bossChange = bossIdx - oldBossIdx;
-  lili.corruption = Math.max(0, lili.corruption + bossChange * 5);
+  let corruptionChange = 0;
+  
+  // 计算污秽等级变化
+  if (bossChange > 0) { // 向前切换
+    for (let i = oldBossIdx; i < bossIdx; i++) {
+      if (i < 8) corruptionChange += 5; // boss1-8每个5点
+      if (i === 7) corruptionChange += 1; // boss8额外+1点
+      // boss9,10不增加污秽等级
+    }
+  } else if (bossChange < 0) { // 向后切换
+    for (let i = bossIdx; i < oldBossIdx; i++) {
+      if (i < 8) corruptionChange -= 5; // boss1-8每个-5点
+      if (i === 7) corruptionChange -= 1; // boss8额外-1点
+      // boss9,10不减少污秽等级
+    }
+  }
+  
+  lili.corruption = Math.max(0, lili.corruption + corruptionChange);
   
   // 如果污秽等级发生变化，显示动画
   if (oldCorruption !== lili.corruption) {
     animateInput(document.getElementById('input-corruption'));
+    updateCorruptionEffects(oldCorruption, lili.corruption);
   }
   
   updateUI();
@@ -788,7 +901,10 @@ function fightMinion() {
   const oldCorruption = lili.corruption;
   lili.hp = Math.max(0, result.finalHp);
   lili.prayUsed += (remainingPray - result.prayRemaining); // 增加已使用的祈祷次数
-  lili.corruption += 1; // 挑战小怪后增加1点污秽等级
+  // 挑战小怪后增加污秽等级（第九关小怪不增加）
+  if (bossIdx !== 8) { // 非第九关小怪
+    lili.corruption += 1;
+  }
   
   // 如果血量发生变化，显示动画
   if (oldHp !== lili.hp) animateInput(document.getElementById('input-hp'));
@@ -799,6 +915,7 @@ function fightMinion() {
   // 如果污秽等级发生变化，显示动画
   if (oldCorruption !== lili.corruption) {
     animateInput(document.getElementById('input-corruption'));
+    updateCorruptionEffects(oldCorruption, lili.corruption);
   }
   
   if (result.win) {
@@ -856,7 +973,7 @@ function updateBossIndicators() {
     
     // 计算对该Boss的战斗结果
     let result;
-    if (i === 9 && optNoRest) {
+    if (i === 9 && !optNoRest) {
       // 第十个boss前无休息：需要连续战斗第九个和第十个boss
       // 先打第九个boss
       const boss9Result = battleResultForBoss({
@@ -909,13 +1026,31 @@ function updateBossIndicators() {
       bossIdx = i;
       const oldCorruption = lili.corruption;
       
-      // 根据Boss变化调整污秽等级（每个Boss相当于5点污秽）
+      // 根据Boss变化调整污秽等级
       const bossChange = bossIdx - oldBossIdx;
-      lili.corruption = Math.max(0, lili.corruption + bossChange * 5);
+      let corruptionChange = 0;
+      
+      // 计算污秽等级变化
+      if (bossChange > 0) { // 向前切换
+        for (let j = oldBossIdx; j < bossIdx; j++) {
+          if (j < 8) corruptionChange += 5; // boss1-8每个5点
+          if (j === 7) corruptionChange += 1; // boss8额外+1点
+          // boss9,10不增加污秽等级
+        }
+      } else if (bossChange < 0) { // 向后切换
+        for (let j = bossIdx; j < oldBossIdx; j++) {
+          if (j < 8) corruptionChange -= 5; // boss1-8每个-5点
+          if (j === 7) corruptionChange -= 1; // boss8额外-1点
+          // boss9,10不减少污秽等级
+        }
+      }
+      
+      lili.corruption = Math.max(0, lili.corruption + corruptionChange);
       
       // 如果污秽等级发生变化，显示动画
       if (oldCorruption !== lili.corruption) {
         animateInput(document.getElementById('input-corruption'));
+        updateCorruptionEffects(oldCorruption, lili.corruption);
       }
       
       updateUI();
@@ -1084,6 +1219,201 @@ function toggleDragonClaw() {
   updateUI();
 }
 
+function toggleCorruptedCrown() {
+  const isChecked = document.getElementById('opt-corrupted-crown').checked;
+  
+  if (isChecked) {
+    // 选中时：攻击+4，防御+4
+    lili.atk += 4;
+    lili.def += 4;
+  } else {
+    // 取消时：攻击-4，防御-4
+    lili.atk = Math.max(0, lili.atk - 4);
+    lili.def = Math.max(0, lili.def - 4);
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-atk').value = lili.atk;
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-atk'));
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
+function toggleBloodyRibbon() {
+  const isChecked = document.getElementById('opt-bloody-ribbon').checked;
+  
+  if (isChecked) {
+    // 选中时：攻击+4，生命上限-20
+    lili.atk += 4;
+    lili.maxHp = Math.max(1, lili.maxHp - 20);
+    // 如果当前血量超过新的最大值，调整当前血量
+    if (lili.hp > lili.maxHp) {
+      lili.hp = lili.maxHp;
+    }
+  } else {
+    // 取消时：攻击-4，生命上限+20
+    lili.atk = Math.max(0, lili.atk - 4);
+    lili.maxHp += 20;
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-atk').value = lili.atk;
+  document.getElementById('input-maxhp').value = lili.maxHp;
+  document.getElementById('input-hp').value = lili.hp;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-atk'));
+  animateInput(document.getElementById('input-maxhp'));
+  animateInput(document.getElementById('input-hp'));
+  
+  updateUI();
+}
+
+function toggleRainbowFeather() {
+  const isChecked = document.getElementById('opt-rainbow-feather').checked;
+  
+  if (isChecked) {
+    // 选中时：攻击+2，防御+2，生命上限+40
+    lili.atk += 2;
+    lili.def += 2;
+    lili.maxHp += 40;
+  } else {
+    // 取消时：攻击-2，防御-2，生命上限-40
+    lili.atk = Math.max(0, lili.atk - 2);
+    lili.def = Math.max(0, lili.def - 2);
+    lili.maxHp = Math.max(1, lili.maxHp - 40);
+    // 如果当前血量超过新的最大值，调整当前血量
+    if (lili.hp > lili.maxHp) {
+      lili.hp = lili.maxHp;
+    }
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-atk').value = lili.atk;
+  document.getElementById('input-def').value = lili.def;
+  document.getElementById('input-maxhp').value = lili.maxHp;
+  document.getElementById('input-hp').value = lili.hp;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-atk'));
+  animateInput(document.getElementById('input-def'));
+  animateInput(document.getElementById('input-maxhp'));
+  animateInput(document.getElementById('input-hp'));
+  
+  updateUI();
+}
+
+function toggleCorruptionAtk() {
+  const isChecked = document.getElementById('opt-corruption-atk').checked;
+  const corruption = lili.corruption;
+  const atkBonus = Math.floor(corruption * 0.1);
+  
+  if (isChecked) {
+    lili.atk += atkBonus;
+  } else {
+    lili.atk -= atkBonus;
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-atk').value = lili.atk;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-atk'));
+  
+  updateUI();
+}
+
+function toggleCorruptionDef() {
+  const isChecked = document.getElementById('opt-corruption-def').checked;
+  const corruption = lili.corruption;
+  const defBonus = Math.floor(corruption * 0.1);
+  
+  if (isChecked) {
+    lili.def += defBonus;
+  } else {
+    lili.def -= defBonus;
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-def').value = lili.def;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-def'));
+  
+  updateUI();
+}
+
+function toggleCorruptionHp() {
+  const isChecked = document.getElementById('opt-corruption-hp').checked;
+  const corruption = lili.corruption;
+  const hpBonus = Math.floor(corruption * 1);
+  
+  if (isChecked) {
+    lili.maxHp += hpBonus;
+    // 同时增加当前血量
+    lili.hp += hpBonus;
+  } else {
+    lili.maxHp -= hpBonus;
+    // 确保当前血量不超过新的最大血量
+    lili.hp = Math.min(lili.hp, lili.maxHp);
+  }
+  
+  // 更新输入框的值
+  document.getElementById('input-maxhp').value = lili.maxHp;
+  document.getElementById('input-hp').value = lili.hp;
+  
+  // 显示动画
+  animateInput(document.getElementById('input-maxhp'));
+  animateInput(document.getElementById('input-hp'));
+  
+  updateUI();
+}
+
+function updateCorruptionEffects(oldCorruption, newCorruption) {
+  // 计算旧的和新的加成值
+  const oldAtkBonus = Math.floor(oldCorruption * 0.1);
+  const newAtkBonus = Math.floor(newCorruption * 0.1);
+  const oldDefBonus = Math.floor(oldCorruption * 0.1);
+  const newDefBonus = Math.floor(newCorruption * 0.1);
+  const oldHpBonus = Math.floor(oldCorruption * 1);
+  const newHpBonus = Math.floor(newCorruption * 1);
+  
+  // 检查各个污秽装备是否被勾选，如果勾选则更新属性
+  const optCorruptionAtk = document.getElementById('opt-corruption-atk').checked;
+  const optCorruptionDef = document.getElementById('opt-corruption-def').checked;
+  const optCorruptionHp = document.getElementById('opt-corruption-hp').checked;
+  
+  if (optCorruptionAtk) {
+    // 先减去旧的加成，再加上新的加成
+    lili.atk = lili.atk - oldAtkBonus + newAtkBonus;
+    document.getElementById('input-atk').value = lili.atk;
+    animateInput(document.getElementById('input-atk'));
+  }
+  
+  if (optCorruptionDef) {
+    lili.def = lili.def - oldDefBonus + newDefBonus;
+    document.getElementById('input-def').value = lili.def;
+    animateInput(document.getElementById('input-def'));
+  }
+  
+  if (optCorruptionHp) {
+    const hpDiff = newHpBonus - oldHpBonus;
+    lili.maxHp += hpDiff;
+    lili.hp += hpDiff; // 同时调整当前血量
+    // 确保血量不会超过新的最大值或低于1
+    lili.hp = Math.max(1, Math.min(lili.hp, lili.maxHp));
+    
+    document.getElementById('input-maxhp').value = lili.maxHp;
+    document.getElementById('input-hp').value = lili.hp;
+    animateInput(document.getElementById('input-maxhp'));
+    animateInput(document.getElementById('input-hp'));
+  }
+}
+
 function calculatePointSuggestion(boss, bossIdx, options) {
   // 基础满血满祈祷的莉莉属性
   const baseLili = {
@@ -1096,7 +1426,7 @@ function calculatePointSuggestion(boss, bossIdx, options) {
   
   // 如果满血满祈祷还是失败，则计算加点建议
   let baseResult;
-  if (bossIdx === 9 && options.optNoRest) {
+  if (bossIdx === 9 && !options.optNoRest) {
     // 第十个boss前无休息：需要连续战斗第九个和第十个boss
     const boss9Result = battleResultForBoss(baseLili, bosses[8], 8, options);
     if (boss9Result.win) {
@@ -1137,7 +1467,7 @@ function calculatePointSuggestion(boss, bossIdx, options) {
         };
         
         let testResult;
-        if (bossIdx === 9 && options.optNoRest) {
+        if (bossIdx === 9 && !options.optNoRest) {
           // 第十个boss前无休息：测试连续战斗
           const boss9TestResult = battleResultForBoss(testLili, bosses[8], 8, options);
           if (boss9TestResult.win) {
@@ -1181,6 +1511,9 @@ function updateUI() {
   const optRestraint = document.getElementById('opt-restraint').checked;
   const optImmunity = document.getElementById('opt-immunity').checked;
   const optNoRest = document.getElementById('opt-no-rest').checked;
+  const optCorruptionAtk = document.getElementById('opt-corruption-atk').checked;
+  const optCorruptionDef = document.getElementById('opt-corruption-def').checked;
+  const optCorruptionHp = document.getElementById('opt-corruption-hp').checked;
 
   // 基础属性
   let atk = parseInt(document.getElementById('input-atk').value)||10;
@@ -1239,10 +1572,16 @@ function updateUI() {
   
   if (bossIdx < 9) { // 第十关是bossIdx=9
     const currentCorruption = lili.corruption;
-    const maxAllowedCorruption = 64; // 修正最大污秽等级
-    // 计算从当前Boss切换到第十关还需要增加多少点污秽（每切换一个Boss增加5点污秽）
-    const stepsToFinalBoss = 9 - bossIdx; // 从当前Boss到第十关需要的切换步数
-    const requiredCorruption = stepsToFinalBoss * 5; // 必须获得的污秽等级
+    const maxAllowedCorruption = 60; // 修正最大污秽等级
+    
+    // 计算从当前Boss切换到第十关还需要增加多少点污秽等级
+    let requiredCorruption = 0;
+    for (let i = bossIdx; i < 9; i++) {
+      if (i < 8) requiredCorruption += 5; // boss1-8每个5点
+      if (i === 7) requiredCorruption += 1; // boss8额外+1点
+      // boss9,10不增加污秽等级
+    }
+    
     const remainingCorruption = Math.max(0, maxAllowedCorruption - currentCorruption - requiredCorruption);
     remainingCorruptionValue.textContent = remainingCorruption;
     
