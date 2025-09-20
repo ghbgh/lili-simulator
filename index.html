@@ -383,10 +383,10 @@
               最大血量：<button class="arrow-btn" onclick="adjustStat('maxHp', -1)">◀</button><input type="number" id="input-maxhp" value="100" style="width:70px;text-align:center;font-size:16px;" step="1" onchange="setStat('maxHp')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustStat('maxHp', 1)">▶</button>
             </div>
             <div style="margin-top:3px;">
-              <button style="padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(-20)" title="修改血量和最大血量 -20">-20🔗</button>
-              <button style="margin-left:2px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHpOnly(-5)" title="修改最大血量 -5">-5</button>
-              <button style="margin-left:8px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHpOnly(5)" title="修改最大血量 +5">+5</button>
-              <button style="margin-left:2px;padding:2px 6px;font-size:12px;" onclick="adjustMaxHp(20)" title="修改血量和最大血量 +20">+20🔗</button>
+              <button style="padding:2px 6px;font-size:16px;" onclick="adjustMaxHp(-20)" title="修改血量和最大血量 -20">-20🔗</button>
+              <button style="margin-left:2px;padding:2px 6px;font-size:16px;" onclick="adjustMaxHpOnly(-5)" title="修改最大血量 -5">-5</button>
+              <button style="margin-left:8px;padding:2px 6px;font-size:16px;" onclick="adjustMaxHpOnly(5)" title="修改最大血量 +5">+5</button>
+              <button style="margin-left:2px;padding:2px 6px;font-size:16px;" onclick="adjustMaxHp(20)" title="修改血量和最大血量 +20">+20🔗</button>
             </div>
             <div class="stat-input-container">
               当前血量：<button class="arrow-btn" onclick="adjustStat('hp', -1)">◀</button><input type="number" id="input-hp" value="100" style="width:70px;text-align:center;font-size:16px;" onchange="setStat('hp')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustStat('hp', 1)">▶</button>
@@ -460,30 +460,29 @@
     </div>
     <!-- 强化选项区域 -->
     <div class="relics-section">
-      <div class="section-title">特殊遗物强化</div>
+      <div class="section-title">特殊遗物强化（不包括低属性或战斗无关遗物）</div>
       <div style="display: flex; gap: 20px; margin-top: 5px;">
         <!-- 左列 -->
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+        <div style="flex: 1.15; display: flex; flex-direction: column; gap: 2px;">
           <label><input type="checkbox" id="opt-pray-amount" onchange="updateUI()"><span><span class="equipment-name purple">（儿汝莉德的戒指）</span>祈祷恢复量+10%</span></label>
           <label><input type="checkbox" id="opt-pray-amount5" onchange="updateUI()"><span><span class="equipment-name">（纯净清泉的圣水）</span>祈祷恢复量+5%</span></label>
           <label><input type="checkbox" id="opt-pray-amount-10" onchange="togglePrayDefense()"><span><span class="equipment-name purple">（莉可丽丝的戒指）</span>祈祷恢复量-10%，防御力+4</span></label>
-          <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"><span><span class="equipment-name orange">（白巫女娃娃）</span>祈祷次数上限+1（特殊效果：祈祷提高4点最大HP，需手动修改）</span></label>
+          <label><input type="checkbox" id="opt-pray-count" onchange="updateUI()"><span><span class="equipment-name orange">（白巫女娃娃）</span>祈祷次数上限+1（特殊效果：每次祈祷永久+4最大HP）</span></label>
           <label><input type="checkbox" id="opt-earring" onchange="updateUI()"><span><span class="equipment-name blue">（白巫女耳环）</span>祈祷次数上限+1</span></label>
           <label><input type="checkbox" id="opt-statue" onchange="updateUI()"><span><span class="equipment-name orange">（白巫女的雕像）</span>祈祷次数上限+1，祈祷恢复生命时会对敌人造成恢复量一半的伤害（伤害计算防御）</span></label>
           <label><input type="checkbox" id="opt-molili" onchange="toggleMoliliRing()"><span><span class="equipment-name orange">（芙莉蒂雅的戒指）</span>受到攻击时反弹防御力×1点伤害，防御+3</span></label>
           <label><input type="checkbox" id="opt-corrupted-crown" onchange="toggleCorruptedCrown()"><span><span class="equipment-name blue">（腐朽的王冠）</span>攻击+4，防御+4，污秽残渣获取率-40%</span></label>
           <label><input type="checkbox" id="opt-bloody-ribbon" onchange="toggleBloodyRibbon()"><span><span class="equipment-name purple">（血染的蝴蝶结）</span>攻击+4，生命上限-20</span></label>
-          <label><input type="checkbox" id="opt-rainbow-feather" onchange="toggleRainbowFeather()"><span><span class="equipment-name orange">（七彩羽毛头饰）</span>攻击+2，防御+2，生命上限+40</span></label>
         </div>
         <!-- 右列 -->
         <div style="flex: 1; display: flex; flex-direction: column; gap: 2px;">
+          <label><input type="checkbox" id="opt-rainbow-feather" onchange="toggleRainbowFeather()"><span><span class="equipment-name orange">（七彩羽毛头饰）</span>攻击+2，防御+2，生命上限+40</span></label>
           <label><input type="checkbox" id="opt-glove" onchange="toggleGlove()"><span><span class="equipment-name orange">（执行人的手套）</span>每回合攻击两次，攻击-5</span></label>
-          <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"><span><span class="equipment-name purple">（破损的音乐盒）</span>对守护者攻击力提高2点</span></label>
+          <label><input type="checkbox" id="opt-boss-atk" onchange="updateUI()"><span><span class="equipment-name purple">（破损的音乐盒）</span>对守护者攻击力提高2点(boss1-7有效)</span></label>
           <label><input type="checkbox" id="opt-restraint" onchange="toggleMagicChain()"><span><span class="equipment-name">（魔线脚链）</span>首轮禁锢敌方使其不能攻击，防御+1</span></label>
           <label><input type="checkbox" id="opt-immunity" onchange="toggleImmunityDefense()"><span><span class="equipment-name purple">（雅若拉的戒指）</span>免疫非攻击类伤害，防御+3</span></label>
           <label><input type="checkbox" id="opt-swap-atk-def" onchange="toggleSwapAtkDef()"><span><span class="equipment-name purple">（灵涡戒）</span>交换攻击和防御，攻击+2，防御+2</span></label>
           <label><input type="checkbox" id="opt-dragon-claw" onchange="toggleDragonClaw()"><span><span class="equipment-name orange">（古龙爪）</span>减少50%防御并增加两倍减少的值到攻击力</span></label>
-          <label><input type="checkbox" id="opt-no-rest" onchange="updateUI()"><span><span class="equipment-name orange">（传送魔石）</span>boss前修整（最终boss前可恢复）</span></label>
           <label><input type="checkbox" id="opt-corruption-atk" onchange="toggleCorruptionAtk()"><span><span class="equipment-name purple">（污秽的幻影）</span>攻击力+污秽等级×0.1</span></label>
           <label><input type="checkbox" id="opt-corruption-def" onchange="toggleCorruptionDef()"><span><span class="equipment-name purple">（王之盾的徽章）</span>防御力+污秽等级×0.1</span></label>
           <label><input type="checkbox" id="opt-corruption-hp" onchange="toggleCorruptionHp()"><span><span class="equipment-name purple">（脏污的银念珠）</span>生命值上限+污秽等级×1</span></label>
@@ -492,6 +491,7 @@
         <div style="display: none;">
           <label><input type="checkbox" id="opt-no-pray" onchange="updateUI()"> （旧版道具）不能使用祈祷</label>
           <label><input type="checkbox" id="opt-minion-atk" onchange="updateUI()"> （旧版道具）对小怪攻击力提高3点</label>
+          <label><input type="checkbox" id="opt-no-rest" onchange="updateUI()"><span><span class="equipment-name orange">（传送魔石）</span>boss前修整（最终boss前可恢复）</span></label>
         </div>
       </div>
     </div>
@@ -511,7 +511,7 @@ const bosses = [
   { atk: 12, def: 10, hp: 250, special: '每回合移除对方12hp', drop: 6 },
   { atk: 80, def: 14, hp: 300, special: '每三回合攻击一次', drop: 7 },
   { atk: 28, def: 15, hp: 350, special: '每次受伤最高10点', drop: 8 },
-  { atk: 44, def: 16, hp: 400, special: '无视50%防御', drop: 9 },
+  { atk: 44, def: 14, hp: 400, special: '无视50%防御', drop: 9 },
   { atk: 35, def: 35, hp: 450, special: 'hp为0后受到5次攻击死亡(且此怪类型为污秽/小怪)', drop: 10 },
   { atk: 50, def: 35, hp: 600, special: '永久增加莉莉攻击7点(前置虚识)', drop: '' },
   { atk: 70, def: 40, hp: 600, special: '血量小于等于25%时不再攻击', drop: '' }
@@ -1354,12 +1354,13 @@ function toggleCorruptionHp() {
   
   if (isChecked) {
     lili.maxHp += hpBonus;
-    // 同时增加当前血量
-    lili.hp += hpBonus;
+    // 不同步修改当前血量，只修改最大血量
   } else {
     lili.maxHp -= hpBonus;
     // 确保当前血量不超过新的最大血量
-    lili.hp = Math.min(lili.hp, lili.maxHp);
+    if (lili.hp > lili.maxHp) {
+      lili.hp = lili.maxHp;
+    }
   }
   
   // 更新输入框的值
@@ -1368,7 +1369,10 @@ function toggleCorruptionHp() {
   
   // 显示动画
   animateInput(document.getElementById('input-maxhp'));
-  animateInput(document.getElementById('input-hp'));
+  // 只有当前血量被调整时才显示动画
+  if (!isChecked && lili.hp > lili.maxHp) {
+    animateInput(document.getElementById('input-hp'));
+  }
   
   updateUI();
 }
@@ -1403,14 +1407,19 @@ function updateCorruptionEffects(oldCorruption, newCorruption) {
   if (optCorruptionHp) {
     const hpDiff = newHpBonus - oldHpBonus;
     lili.maxHp += hpDiff;
-    lili.hp += hpDiff; // 同时调整当前血量
-    // 确保血量不会超过新的最大值或低于1
-    lili.hp = Math.max(1, Math.min(lili.hp, lili.maxHp));
+    // 不同步调整当前血量，只修改最大血量
+    // 确保当前血量不超过新的最大血量
+    if (lili.hp > lili.maxHp) {
+      lili.hp = lili.maxHp;
+    }
     
     document.getElementById('input-maxhp').value = lili.maxHp;
     document.getElementById('input-hp').value = lili.hp;
     animateInput(document.getElementById('input-maxhp'));
-    animateInput(document.getElementById('input-hp'));
+    // 只有当前血量被调整时才显示动画
+    if (lili.hp > lili.maxHp) {
+      animateInput(document.getElementById('input-hp'));
+    }
   }
 }
 
@@ -1689,17 +1698,129 @@ function updateUI() {
   updateBossIndicators();
 }
 
+// 调试面板状态
+let debugOffset = {
+  bossAtk: 0,
+  bossDef: 0,
+  bossHp: 0,
+  minionAtk: 0,
+  minionDef: 0,
+  minionHp: 0
+};
+
+// 获取调试后的boss属性
+function getDebuggedBoss(boss) {
+  return {
+    ...boss,
+    atk: boss.atk + (debugOffset.bossAtk || 0),
+    def: boss.def + (debugOffset.bossDef || 0),
+    hp: boss.hp + (debugOffset.bossHp || 0)
+  };
+}
+
+// 获取调试后的小怪属性
+function getDebuggedMinion(minion) {
+  return {
+    ...minion,
+    atk: minion.atk + (debugOffset.minionAtk || 0),
+    def: minion.def + (debugOffset.minionDef || 0),
+    hp: minion.hp + (debugOffset.minionHp || 0)
+  };
+}
+
+// 切换调试面板显示状态
+function toggleDebugPanel() {
+  const content = document.getElementById('debug-content');
+  const indicator = document.getElementById('debug-toggle-indicator');
+  
+  if (content.style.display === 'none') {
+    content.style.display = 'block';
+    indicator.textContent = '[点击折叠]';
+  } else {
+    content.style.display = 'none';
+    indicator.textContent = '[点击展开]';
+  }
+}
+
+// 调整调试统计值
+function adjustDebugStat(type, amount) {
+  debugOffset[type] = (debugOffset[type] || 0) + amount;
+  
+  // 更新对应的输入框
+  let inputId = '';
+  if (type === 'bossAtk') inputId = 'debug-boss-atk';
+  else if (type === 'bossDef') inputId = 'debug-boss-def';
+  else if (type === 'bossHp') inputId = 'debug-boss-hp';
+  else if (type === 'minionAtk') inputId = 'debug-minion-atk';
+  else if (type === 'minionDef') inputId = 'debug-minion-def';
+  else if (type === 'minionHp') inputId = 'debug-minion-hp';
+  
+  if (inputId) {
+    const input = document.getElementById(inputId);
+    input.value = debugOffset[type];
+    animateInput(input);
+  }
+  
+  // 更新UI显示
+  updateUI();
+}
+
+// 设置调试统计值
+function setDebugStat(type) {
+  let inputId = '';
+  if (type === 'bossAtk') inputId = 'debug-boss-atk';
+  else if (type === 'bossDef') inputId = 'debug-boss-def';
+  else if (type === 'bossHp') inputId = 'debug-boss-hp';
+  else if (type === 'minionAtk') inputId = 'debug-minion-atk';
+  else if (type === 'minionDef') inputId = 'debug-minion-def';
+  else if (type === 'minionHp') inputId = 'debug-minion-hp';
+  
+  if (inputId) {
+    const input = document.getElementById(inputId);
+    debugOffset[type] = parseInt(input.value) || 0;
+    updateUI();
+  }
+}
+
+// 重置所有调试统计值
+function resetDebugStats() {
+  debugOffset = {
+    bossAtk: 0,
+    bossDef: 0,
+    bossHp: 0,
+    minionAtk: 0,
+    minionDef: 0,
+    minionHp: 0
+  };
+  
+  // 更新所有输入框
+  document.getElementById('debug-boss-atk').value = 0;
+  document.getElementById('debug-boss-def').value = 0;
+  document.getElementById('debug-boss-hp').value = 0;
+  document.getElementById('debug-minion-atk').value = 0;
+  document.getElementById('debug-minion-def').value = 0;
+  document.getElementById('debug-minion-hp').value = 0;
+  
+  updateUI();
+}
+
 function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
+  // 保存原始最大HP，用于战斗结束后恢复
+  const originalMaxHp = lili.maxHp;
+  
+  // 应用调试偏移量
+  const debuggedBoss = getDebuggedBoss(boss);
+  
   let liliHp = lili.hp;
-  let bossHp = boss.hp;
+  let bossHp = debuggedBoss.hp;
   let liliAtk = lili.atk;
   let liliDef = lili.def;
   
   if (bossBattleIdx === 7) {
     // 第8只boss特殊：被视为小怪，使用小怪攻击增强
     if (opts.optMinionAtk) liliAtk += 3;
-  } else {
-    // 其他boss使用守护者攻击增强
+  } else if (bossBattleIdx < 7) {
+    // boss1-7使用守护者攻击增强，boss9和boss10不属于守护者
     if (opts.optBossAtk) liliAtk += 2;
   }
   
@@ -1707,9 +1828,9 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
   if (bossBattleIdx === 8 || bossBattleIdx === 9) {
     liliAtk += 7;
   }
-  let bossAtk = boss.atk;
+  let bossAtk = debuggedBoss.atk;
   let round = 1;
-  let bossSpecial = boss.special;
+  let bossSpecial = debuggedBoss.special;
   let hpConsumed = 0;
   let totalHpConsumed = 0; // 总消耗血量，包括祈祷恢复后又减去的血量
   let bossAlive = true;
@@ -1731,7 +1852,7 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
   while (liliAlive && bossAlive && round < 1000) {
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
-      let liliDmg = Math.max(1, liliAtk - boss.def);
+      let liliDmg = Math.max(1, liliAtk - debuggedBoss.def);
       // boss特殊：每次受伤最高10点
       if (bossBattleIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
@@ -1747,19 +1868,38 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
     }
     
     // 祈祷技能（莉莉攻击后，敌方攻击前）
-    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
+    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
       let heal = Math.floor(lili.maxHp * prayAmount);
+      
+      // 先按原最大HP祈祷回血
       liliHp += heal;
       prayCount--;
+      
+      // 白巫女娃娃特殊效果：祈祷后临时增加4点最大HP（仅战斗中有效）
+      let maxHpIncrease = 0;
+      if (optPrayCount) {
+        maxHpIncrease = 4;
+        // 注意：这里不修改lili.maxHp，而是在战斗中临时调整最大血量限制
+      }
+      
       // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
       if (optStatue) {
-        let statueDmg = Math.max(1, Math.floor(heal / 2) - boss.def);
+        let statueDmg = Math.max(1, Math.floor(heal / 2) - debuggedBoss.def);
         // boss特殊：每次受伤最高10点
         if (bossBattleIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
-        if (round <= 30) damageLog.push(`${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命，雕像效果对Boss造成${statueDmg}点伤害`);
+        if (round <= 30) {
+          let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
+          if (maxHpIncrease > 0) logMessage += `（娃娃效果+${maxHpIncrease}最大HP）`;
+          logMessage += `，雕像效果对Boss造成${statueDmg}点伤害`;
+          damageLog.push(logMessage);
+        }
       } else {
-        if (round <= 30) damageLog.push(`${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`);
+        if (round <= 30) {
+          let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
+          if (maxHpIncrease > 0) logMessage += `（娃娃效果+${maxHpIncrease}最大HP）`;
+          damageLog.push(logMessage);
+        }
       }
     }
     
@@ -1808,7 +1948,7 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
 
         // 芙莉蒂雅的戒指效果：反弹防御力伤害
         if (opts.optMolili && bossDmg > 0) {
-          let reflect = Math.max(1, liliDef - boss.def);
+          let reflect = Math.max(1, liliDef - debuggedBoss.def);
           // boss特殊：每次受伤最高10点
           if (bossBattleIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
@@ -1832,14 +1972,20 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
 }
 
 function battleResult(lili, boss, opts={}) {
+  // 保存原始最大HP，用于战斗结束后恢复
+  const originalMaxHp = lili.maxHp;
+  
+  // 应用调试偏移量
+  const debuggedBoss = getDebuggedBoss(boss);
+  
   let liliHp = lili.hp; // 使用当前血量而不是最大血量
-  let bossHp = boss.hp;
+  let bossHp = debuggedBoss.hp;
   let liliAtk = lili.atk;
   if (bossIdx === 7) {
     // 第8只boss特殊：被视为小怪，使用小怪攻击增强
     if (opts.optMinionAtk) liliAtk += 3;
-  } else {
-    // 其他boss使用守护者攻击增强
+  } else if (bossIdx < 7) {
+    // boss1-7使用守护者攻击增强，boss9和boss10不属于守护者
     if (opts.optBossAtk) liliAtk += 2; // 对boss攻击力+2
   }
   
@@ -1847,9 +1993,9 @@ function battleResult(lili, boss, opts={}) {
   if (bossIdx === 8 || bossIdx === 9) {
     liliAtk += 7;
   }
-  let bossAtk = boss.atk;
+  let bossAtk = debuggedBoss.atk;
   let round = 1;
-  let bossSpecial = boss.special;
+  let bossSpecial = debuggedBoss.special;
   let hpConsumed = 0;
   let totalHpConsumed = 0; // 总消耗血量，包括祈祷恢复后又减去的血量
   let bossAlive = true;
@@ -1871,7 +2017,7 @@ function battleResult(lili, boss, opts={}) {
   while (liliAlive && bossAlive && round < 1000) {
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
-      let liliDmg = Math.max(1, liliAtk - boss.def);
+      let liliDmg = Math.max(1, liliAtk - debuggedBoss.def);
       // boss特殊：每次受伤最高10点
       if (bossIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
@@ -1887,19 +2033,44 @@ function battleResult(lili, boss, opts={}) {
     }
     
     // 祈祷技能（莉莉攻击后，敌方攻击前）
-    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
+    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
       let heal = Math.floor(lili.maxHp * prayAmount);
+      
+      // 先按原最大HP祈祷回血
       liliHp += heal;
       prayCount--;
+      
+      // 白巫女娃娃特殊效果：祈祷后临时增加4点最大HP（仅战斗中有效）
+      let maxHpIncrease = 0;
+      if (optPrayCount) {
+        maxHpIncrease = 4;
+        // 注意：这里不修改lili.maxHp，而是在战斗中临时调整最大血量限制
+      }
+      
+      // 应用临时最大HP增加，确保HP不超过临时上限
+      let tempMaxHp = lili.maxHp + maxHpIncrease;
+      if (liliHp > tempMaxHp) {
+        liliHp = tempMaxHp;
+      }
+      
       // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
       if (optStatue) {
-        let statueDmg = Math.max(1, Math.floor(heal / 2) - boss.def);
+        let statueDmg = Math.max(1, Math.floor(heal / 2) - debuggedBoss.def);
         // boss特殊：每次受伤最高10点
         if (bossIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
-        if (round <= 30) damageLog.push(`${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命，雕像效果对Boss造成${statueDmg}点伤害`);
+        if (round <= 30) {
+          let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
+          if (maxHpIncrease > 0) logMessage += `（娃娃效果+${maxHpIncrease}最大HP）`;
+          logMessage += `，雕像效果对Boss造成${statueDmg}点伤害`;
+          damageLog.push(logMessage);
+        }
       } else {
-        if (round <= 30) damageLog.push(`${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`);
+        if (round <= 30) {
+          let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
+          if (maxHpIncrease > 0) logMessage += `（娃娃效果+${maxHpIncrease}最大HP）`;
+          damageLog.push(logMessage);
+        }
       }
     }
     
@@ -1948,7 +2119,7 @@ function battleResult(lili, boss, opts={}) {
         
         // 莫莉莉的戒指效果：反弹防御力伤害
         if (optMolili && bossDmg > 0) {
-          let reflect = Math.max(1, lili.def - boss.def);
+          let reflect = Math.max(1, lili.def - debuggedBoss.def);
           // boss特殊：每次受伤最高10点
           if (bossIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
@@ -1968,17 +2139,23 @@ function battleResult(lili, boss, opts={}) {
     round++;
   }
   
+  // 恢复原始最大HP（防止影响后续操作）
+  lili.maxHp = originalMaxHp;
+  
   return { win: bossAlive === false && liliAlive, remainingHp: liliHp, remainingPray: prayCount, totalHpConsumed: totalHpConsumed, damageLog: damageLog };
 }
 
 function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
+  // 应用调试偏移量
+  const debuggedMinion = getDebuggedMinion(minion);
+  
   let liliHp = lili.hp; // 使用传入的当前血量
-  let minionHp = minion.hp;
+  let minionHp = debuggedMinion.hp;
   let liliAtk = lili.atk;
   let liliDef = lili.def;
   
   if (opts.optMinionAtk) liliAtk += 3; // 对小怪攻击力+3
-  let minionAtk = minion.atk;
+  let minionAtk = debuggedMinion.atk;
   let round = 1;
   let minionAlive = true;
   let liliAlive = true;
@@ -1994,18 +2171,34 @@ function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
   while (liliAlive && minionAlive && round < 1000) {
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
-      let liliDmg = Math.max(1, liliAtk - minion.def);
+      let liliDmg = Math.max(1, liliAtk - debuggedMinion.def);
       minionHp -= liliDmg;
     }
     
     // 祈祷技能（莉莉攻击后，敌方攻击前）
-    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * prayAmount) && prayCount > 0) {
+    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
       let heal = Math.floor(lili.maxHp * prayAmount);
+      
+      // 先按原最大HP祈祷回血
       liliHp += heal;
       prayCount--;
+      
+      // 白巫女娃娃特殊效果：祈祷后临时增加4点最大HP（仅战斗中有效）
+      let maxHpIncrease = 0;
+      if (opts.optPrayCount) {
+        maxHpIncrease = 4;
+        // 注意：这里不修改lili.maxHp，而是在战斗中临时调整最大血量限制
+      }
+      
+      // 应用临时最大HP增加，确保HP不超过临时上限
+      let tempMaxHp = lili.maxHp + maxHpIncrease;
+      if (liliHp > tempMaxHp) {
+        liliHp = tempMaxHp;
+      }
+      
       // 白巫女雕像效果：祈祷对敌人造成恢复量一半的伤害（计算防御）
       if (optStatue) {
-        let statueDmg = Math.max(1, Math.floor(heal / 2) - minion.def);
+        let statueDmg = Math.max(1, Math.floor(heal / 2) - debuggedMinion.def);
         minionHp -= statueDmg;
       }
     }
@@ -2026,7 +2219,7 @@ function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
       
       // 莫莉莉的戒指效果：反弹防御力伤害
       if (opts.optMolili && minionDmg > 0) {
-        let reflect = Math.max(1, liliDef - minion.def);
+        let reflect = Math.max(1, liliDef - debuggedMinion.def);
         minionHp -= reflect;
       }
       
@@ -2052,11 +2245,54 @@ updateUI();
       <!-- 说明内容将在这里添加 -->
       <p>1. 加点推荐仅计算满状态打当前boss，仅供参考，建议切换boss衡量</p>
       <p>2. 打完boss后，记得切换boss，重置状态</p>
-      <p>3. 部分数值与实际游戏中数值不同，如boss3的攻击，这是因为推测游戏中的显示值不正确</p>
-      <p>4. 部分boss计算可能存在不正确的情况（如boss8），（似乎是计算为守护者而不是污秽？待确认）</p>
-      <p>5. 部分实时计算的属性记得手动更新，如：白女巫娃娃，按污秽值提升攻防血（注意游戏内更新属性有延迟）</p>
+      <p>3. 部分boss原游戏中显示值疑似存在问题，已按推测值修改，如boss3的攻击，boss7的防御</p>
+      <p>4. 计算可能存在与原游戏不符的情况，已知的有：boss8、boss10、装备手套+脚链时的小怪掉血，征集线索中</p>
+      <p>5. 白女巫娃娃的血上限需手动更新；基于污秽值提升攻防血的装备需切换boss改变了值才会更新预测</p>
       <p>6. 友情提醒：0死TE在第九关boss前记得抽到石板</p>
       <p>7. 声明：使用本计算器造成可能的计算错误问题或队友等待时间变长等问题与作者无关</p>
+    </div>
+  </div>
+</div>
+
+<!-- 调试面板 -->
+<div id="debug-panel" style="position: fixed; top: 20px; right: 10px; width: 320px; z-index: 1000; border: 2px solid #888; border-radius: 8px; background: #f9f9f9; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+  <div style="background: #ddd; padding: 8px; border-radius: 6px 6px 0 0; cursor: pointer; user-select: none;" onclick="toggleDebugPanel()">
+    <strong>🔧 调试面板</strong> <span id="debug-toggle-indicator">[点击展开]</span>
+  </div>
+  <div id="debug-content" style="display: none; padding: 15px; max-height: 70vh; overflow-y: auto;">
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+      <!-- Boss偏移量 -->
+      <div>
+        <h4 style="margin: 0 0 10px 0; color: #d32f2f; font-size: 14px;">Boss属性偏移量</h4>
+        <div class="stat-input-container" style="margin-bottom: 8px;">
+          攻击偏移：<button class="arrow-btn" onclick="adjustDebugStat('bossAtk', -1)">◀</button><input type="number" id="debug-boss-atk" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('bossAtk')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('bossAtk', 1)">▶</button>
+        </div>
+        <div class="stat-input-container" style="margin-bottom: 8px;">
+          防御偏移：<button class="arrow-btn" onclick="adjustDebugStat('bossDef', -1)">◀</button><input type="number" id="debug-boss-def" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('bossDef')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('bossDef', 1)">▶</button>
+        </div>
+        <div class="stat-input-container" style="margin-bottom: 8px;">
+          血量偏移：<button class="arrow-btn" onclick="adjustDebugStat('bossHp', -1)">◀</button><input type="number" id="debug-boss-hp" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('bossHp')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('bossHp', 1)">▶</button>
+        </div>
+      </div>
+      
+      <!-- 小怪偏移量 -->
+      <div>
+        <h4 style="margin: 0 0 10px 0; color: #388e3c; font-size: 14px;">小怪属性偏移量</h4>
+        <div class="stat-input-container" style="margin-bottom: 8px;">
+          攻击偏移：<button class="arrow-btn" onclick="adjustDebugStat('minionAtk', -1)">◀</button><input type="number" id="debug-minion-atk" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('minionAtk')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('minionAtk', 1)">▶</button>
+        </div>
+        <div class="stat-input-container" style="margin-bottom: 8px;">
+          防御偏移：<button class="arrow-btn" onclick="adjustDebugStat('minionDef', -1)">◀</button><input type="number" id="debug-minion-def" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('minionDef')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('minionDef', 1)">▶</button>
+        </div>
+        <div class="stat-input-container" style="margin-bottom: 8px;">
+          血量偏移：<button class="arrow-btn" onclick="adjustDebugStat('minionHp', -1)">◀</button><input type="number" id="debug-minion-hp" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('minionHp')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('minionHp', 1)">▶</button>
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #ccc;">
+      <button style="padding: 4px 8px; background: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;" onclick="resetDebugStats()">重置偏移量</button>
+      <div style="margin-top: 8px; font-size: 11px; color: #666;">注意：偏移量会应用到所有战斗计算中</div>
     </div>
   </div>
 </div>
