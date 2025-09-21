@@ -17,11 +17,13 @@ This project is a browser-based turn-based battle game featuring a protagonist (
 - **Battle Flow:**
   - Lili always attacks first each round.
   - Prayer system triggers AFTER Lili's attack but BEFORE enemy attack (timing changed from round start).
+  - Prayer trigger condition is FIXED at 30% max HP regardless of prayer recovery amount equipment.
   - Damage = max(1, attacker.atk - defender.def).
   - Special boss/minion rules modify attack/defense/hp or battle sequence.
   - Prayer system allows healing when HP drops below 30% of max HP.
+  - White Witch Doll: Each prayer permanently increases max HP by 4 points immediately during battle.
   - Restraint effects (禁锢) block both attacks AND special abilities in first round.
-  - Damage cap effects (第6只boss) apply to ALL damage sources including prayer statue damage and reflection.
+  - Damage cap effects (Boss 6) apply to ALL damage sources including prayer statue damage and reflection.
   - After boss battles, Lili's HP is restored to max, but minion battles preserve current HP.
   - Real-time battle prediction shows outcome without actually fighting.
   - Corruption increases by 5 points per boss defeated and 1 point per minion defeated.
@@ -32,7 +34,7 @@ This project is a browser-based turn-based battle game featuring a protagonist (
   - 祈祷恢复量+10% (儿泣精灵的戒指)
   - 祈祷恢复量+5%
   - 祈祷恢复量-10%
-  - 祈祷次数上限+1 (白巫女娃娃：与守护者战斗开始时祈祷次数回复至上限)
+  - 祈祷次数上限+1 (白巫女娃娃：每次祈祷永久增加4点最大HP)
   - 祈祷次数上限+1 (白巫女耳环)
   - 白巫女的雕像：祈祷使用次数上限+1，祈祷恢复生命时会对敌人造成恢复量一半的伤害（伤害计算防御）
   - 不能使用祈祷
@@ -49,6 +51,9 @@ This project is a browser-based turn-based battle game featuring a protagonist (
   - 血染的蝴蝶结：攻击+4，生命上限-20 (with 面板同步)
   - 七彩羽毛头饰：攻击+2，防御+2，生命上限+40 (with 面板同步)
 
+- **BUG Fix Options:**
+  - （BUG）Boss8迷瑞尔特殊效果仅生效一次：红色装备，勾选时Boss8在HP为0后只需1次攻击死亡，取消勾选时需要5次攻击死亡
+
 ## UI Features
 - **Enhanced Input Controls:** Custom left/right arrow buttons for stat adjustment with immediate visual feedback and compact layout
 - **Visual Feedback:** Stat changes trigger blue flash animations on affected input fields and prayer count displays
@@ -61,7 +66,8 @@ This project is a browser-based turn-based battle game featuring a protagonist (
 - **Battle Log Formatting:** Simplified round indicators (from "第x轮：" to "x:") for cleaner readability
 - **Prayer System Tracking:** Records used prayers internally while displaying remaining count to users
 - **Equipment Interaction:** Enhanced click targets - both checkbox and equipment text are clickable for easier interaction
-- **Equipment Name Styling:** Color-coded equipment names with deeper background colors for better contrast and visual hierarchy
+- **Equipment Name Styling:** Color-coded equipment names with deeper background colors for better contrast and visual hierarchy (orange, purple, blue, green, red)
+- **Debug Panel:** Fixed right-side overlay panel with Boss/Minion attribute offset controls for testing different values
 - **Reset Functions:** 
   - "重置血量和祈祷" resets HP to max and prayer usage, respecting current enhancement bonuses
   - Located in Lili attributes section for logical grouping
@@ -204,6 +210,19 @@ This project is a browser-based turn-based battle game featuring a protagonist (
   - Optimized boss navigation spacing and sizing
   - Enhanced visual density and component alignment
   - Improved responsive layout and element positioning
+- **Prayer System Fixes:**
+  - Prayer trigger condition fixed to 30% max HP regardless of recovery amount equipment
+  - White Witch Doll now correctly increases max HP by 4 points per prayer during battle
+  - Prayer timing properly implemented after Lili's attack but before enemy attack
+- **Boss8 BUG Option:**
+  - Added red-colored BUG equipment option for Boss8 special effect control
+  - Checked: Boss8 dies after 1 hit when HP reaches 0 (BUG behavior)
+  - Unchecked: Boss8 dies after 5 hits when HP reaches 0 (normal behavior)
+- **Debug Panel System:**
+  - Fixed right-side overlay panel for attribute offset testing
+  - Boss and minion attribute offsets (attack, defense, HP) for debugging
+  - Real-time battle calculation updates with offset values
+  - Fixed defense offset bug where Boss defense offsets were not applied correctly
 
 ---
 **For AI agents:**
