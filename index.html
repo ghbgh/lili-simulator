@@ -1891,14 +1891,26 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
   let optBoss8Bug = opts.optBoss8Bug;
   let damageLog = [];
 
+  // 读取调试选项
+  const debugShowHp = document.getElementById('debug-show-hp')?.checked || false;
+  const debugFullLog = document.getElementById('debug-full-log')?.checked || false;
+  const maxLogRounds = debugFullLog ? 999 : 30;
+
   while (liliAlive && bossAlive && round < 1000) {
+    // 第十只boss特殊：血量小于等于25%时不再攻击（回合开始判定）
+    let bossCanAttackThisRound = true;
+    if (bossBattleIdx === 9 && bossHp <= boss.hp * 0.25) {
+      bossCanAttackThisRound = false;
+      if (round <= maxLogRounds) damageLog.push(`${round}:Boss血量低于25%，停止攻击`);
+    }
+    
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
       let liliDmg = Math.max(1, liliAtk - debuggedBoss.def);
       // boss特殊：每次受伤最高10点
       if (bossBattleIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
-      if (round <= 30) damageLog.push(`${round}:莉莉对Boss造成${liliDmg}点伤害`);
+      if (round <= maxLogRounds) damageLog.push(`${round}:莉莉对Boss造成${liliDmg}点伤害`);
       // boss特殊：hp为0后受到攻击死亡（BUG选项控制次数）
       if (bossBattleIdx === 7 && bossHp <= 0) {
         bossDeathDelay++;
@@ -1948,7 +1960,16 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
     if (bossBattleIdx === 3 && bossAlive && !optImmunity && !(opts.optRestraint && round === 1)) {
       liliHp -= 12;
       totalHpConsumed += 12; // 记录总消耗血量
-      if (round <= 30) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
+      if (round <= maxLogRounds) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
+      
+      // 芙莉蒂雅的戒指效果：反弹防御力伤害
+      if (opts.optMolili) {
+        let reflect = Math.max(1, liliDef - debuggedBoss.def);
+        // boss特殊：每次受伤最高10点
+        if (bossBattleIdx === 5) reflect = Math.min(reflect, 10);
+        bossHp -= reflect;
+        if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
+      }
     } else if (bossBattleIdx === 3 && bossAlive && optImmunity && !(opts.optRestraint && round === 1) && round <= 30) {
       damageLog.push(`${round}:Boss特殊攻击被免疫无效`);
     } else if (bossBattleIdx === 3 && bossAlive && opts.optRestraint && round === 1 && round <= 30) {
@@ -1970,10 +1991,9 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
     // boss特殊：每回合攻击两次
     let bossAttackTimes = (bossBattleIdx === 2) ? 2 : 1;
     
-    // 第十只boss特殊：血量小于等于25%时不再攻击
-    if (bossBattleIdx === 9 && bossHp <= boss.hp * 0.25) {
+    // 如果boss10血量过低则不攻击
+    if (!bossCanAttackThisRound) {
       bossAttackTimes = 0;
-      if (round <= 30) damageLog.push(`${round}:Boss血量低于25%，停止攻击`);
     }
     
     for (let i = 0; i < bossAttackTimes; i++) {
@@ -1985,7 +2005,7 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
         liliHp -= bossDmg;
         hpConsumed += bossDmg;
         totalHpConsumed += bossDmg; // 记录总消耗血量
-        if (round <= 30) damageLog.push(`${round}:Boss对莉莉造成${bossDmg}点伤害`);
+        if (round <= maxLogRounds) damageLog.push(`${round}:Boss对莉莉造成${bossDmg}点伤害`);
 
         // 芙莉蒂雅的戒指效果：反弹防御力伤害
         if (opts.optMolili && bossDmg > 0) {
@@ -1993,7 +2013,7 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
           // boss特殊：每次受伤最高10点
           if (bossBattleIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
-          if (round <= 30) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
+          if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
         }
         
         if (liliHp <= 0) liliAlive = false;
@@ -2003,7 +2023,12 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
     // boss特殊：每次攻击后增加自身atk一点（但受到魔线脚链影响时不增加）
     if (bossBattleIdx === 1 && bossAlive && !(opts.optRestraint && round === 1)) {
       bossAtk++;
-      if (round <= 30) damageLog.push(`${round}:Boss攻击力增加1点，当前攻击力${bossAtk}`);
+      if (round <= maxLogRounds) damageLog.push(`${round}:Boss攻击力增加1点，当前攻击力${bossAtk}`);
+    }
+    
+    // 调试选项：显示每回合血量
+    if (debugShowHp && round <= maxLogRounds) {
+      damageLog.push(`${round}回合结束: 莉莉 ${liliHp}/${maxHp}, Boss ${bossHp}/${debuggedBoss.hp}`);
     }
     
     round++;
@@ -2060,13 +2085,20 @@ function battleResult(lili, boss, opts={}) {
   let damageLog = [];
 
   while (liliAlive && bossAlive && round < 1000) {
+    // 第十只boss特殊：血量小于等于25%时不再攻击（回合开始判定）
+    let bossCanAttackThisRound = true;
+    if (bossIdx === 9 && bossHp <= boss.hp * 0.25) {
+      bossCanAttackThisRound = false;
+      if (round <= maxLogRounds) damageLog.push(`${round}:Boss血量低于25%，停止攻击`);
+    }
+    
     // 莉莉攻击
     for (let t = 0; t < atkTimes; t++) {
       let liliDmg = Math.max(1, liliAtk - debuggedBoss.def);
       // boss特殊：每次受伤最高10点
       if (bossIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
-      if (round <= 30) damageLog.push(`${round}:莉莉对Boss造成${liliDmg}点伤害`);
+      if (round <= maxLogRounds) damageLog.push(`${round}:莉莉对Boss造成${liliDmg}点伤害`);
       // boss特殊：hp为0后受到攻击死亡（BUG选项控制次数）
       if (bossIdx === 7 && bossHp <= 0) {
         bossDeathDelay++;
@@ -2102,14 +2134,14 @@ function battleResult(lili, boss, opts={}) {
         // boss特殊：每次受伤最高10点
         if (bossIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
-        if (round <= 30) {
+        if (round <= maxLogRounds) {
           let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
           if (optPrayCount) logMessage += `（娃娃效果+4最大HP）`;
           logMessage += `，雕像效果对Boss造成${statueDmg}点伤害`;
           damageLog.push(logMessage);
         }
       } else {
-        if (round <= 30) {
+        if (round <= maxLogRounds) {
           let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
           if (optPrayCount) logMessage += `（娃娃效果+4最大HP）`;
           damageLog.push(logMessage);
@@ -2121,7 +2153,16 @@ function battleResult(lili, boss, opts={}) {
     if (bossIdx === 3 && bossAlive && !optImmunity && !(optRestraint && round === 1)) {
       liliHp -= 12;
       totalHpConsumed += 12; // 记录总消耗血量
-      if (round <= 30) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
+      if (round <= maxLogRounds) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
+      
+      // 芙莉蒂雅的戒指效果：反弹防御力伤害
+      if (optMolili) {
+        let reflect = Math.max(1, lili.def - debuggedBoss.def);
+        // boss特殊：每次受伤最高10点
+        if (bossIdx === 5) reflect = Math.min(reflect, 10);
+        bossHp -= reflect;
+        if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
+      }
     } else if (bossIdx === 3 && bossAlive && optImmunity && !(optRestraint && round === 1) && round <= 30) {
       damageLog.push(`${round}:Boss特殊攻击被免疫无效`);
     } else if (bossIdx === 3 && bossAlive && optRestraint && round === 1 && round <= 30) {
@@ -2143,10 +2184,9 @@ function battleResult(lili, boss, opts={}) {
     // boss特殊：每回合攻击两次
     let bossAttackTimes = (bossIdx === 2) ? 2 : 1;
     
-    // 第十只boss特殊：血量小于等于25%时不再攻击
-    if (bossIdx === 9 && bossHp <= boss.hp * 0.25) {
+    // 如果boss10血量过低则不攻击
+    if (!bossCanAttackThisRound) {
       bossAttackTimes = 0;
-      if (round <= 30) damageLog.push(`${round}:Boss血量低于25%，停止攻击`);
     }
     
     for (let i = 0; i < bossAttackTimes; i++) {
@@ -2158,7 +2198,7 @@ function battleResult(lili, boss, opts={}) {
         liliHp -= bossDmg;
         hpConsumed += bossDmg;
         totalHpConsumed += bossDmg; // 记录总消耗血量
-        if (round <= 30) damageLog.push(`${round}:Boss对莉莉造成${bossDmg}点伤害`);
+        if (round <= maxLogRounds) damageLog.push(`${round}:Boss对莉莉造成${bossDmg}点伤害`);
         
         // 莫莉莉的戒指效果：反弹防御力伤害
         if (optMolili && bossDmg > 0) {
@@ -2166,7 +2206,7 @@ function battleResult(lili, boss, opts={}) {
           // boss特殊：每次受伤最高10点
           if (bossIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
-          if (round <= 30) damageLog.push(`${round}:莫莉莉的戒指反弹${reflect}点伤害给Boss`);
+          if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
         }
         
         if (liliHp <= 0) liliAlive = false;
@@ -2176,7 +2216,12 @@ function battleResult(lili, boss, opts={}) {
     // boss特殊：每次攻击后增加自身atk一点（但受到魔线脚链影响时不增加）
     if (bossIdx === 1 && bossAlive && !(optRestraint && round === 1)) {
       bossAtk++;
-      if (round <= 30) damageLog.push(`${round}:Boss攻击力增加1点，当前攻击力${bossAtk}`);
+      if (round <= maxLogRounds) damageLog.push(`${round}:Boss攻击力增加1点，当前攻击力${bossAtk}`);
+    }
+    
+    // 调试选项：显示每回合血量
+    if (debugShowHp && round <= maxLogRounds) {
+      damageLog.push(`${round}回合结束: 莉莉 ${liliHp}/${maxHp}, Boss ${bossHp}/${debuggedBoss.hp}`);
     }
     
     round++;
@@ -2404,10 +2449,10 @@ updateUI();
     <div id="helpContent">
       <!-- 说明内容将在这里添加 -->
       <p>1. 加点推荐仅计算满状态打当前boss，仅供参考，建议切换boss衡量</p>
-      <p>2. 打完boss后，记得切换boss，重置状态</p>
-      <p>3. 部分boss原游戏中显示值疑似存在问题，已按推测值修改，如boss3的攻击，boss7的防御，boss8的特殊效果</p>
-      <p>4. 计算可能存在与原游戏不符的情况，已知的有：boss10、装备手套+脚链时打小怪损血，征集线索中</p>
-      <p>5. 白女巫娃娃的血上限需手动更新；基于污秽值提升攻防血的装备需切换boss改变了值才会更新预测</p>
+      <p>2. 部分boss原游戏中显示值疑似存在问题，已按推测值修改，如boss3的攻击，boss7的防御，boss8的特殊效果</p>
+      <p>3. 计算可能存在与原游戏不符的情况，已知的有：boss10、装备手套+脚链时打小怪损血，征集线索中</p>
+      <p>4. 白巫女娃娃的血上限存在不准确的情况需手动更新，并且在游戏中战斗预测和战斗日志计算疑似不同，预测不会计算血上限变化导致的祈祷量增加，此程序以预测为准增加容错</p>
+      <p>5. 基于污秽值提升攻防血的装备需切换boss改变污秽值才会更新预测</p>
       <p>6. 友情提醒：0死TE在第九关boss前记得抽到石板</p>
       <p>7. 声明：使用本计算器造成可能的计算错误问题或队友等待时间变长等问题与作者无关</p>
     </div>
@@ -2447,6 +2492,23 @@ updateUI();
         <div class="stat-input-container" style="margin-bottom: 8px;">
           血量偏移：<button class="arrow-btn" onclick="adjustDebugStat('minionHp', -1)">◀</button><input type="number" id="debug-minion-hp" value="0" style="width:40px;text-align:center;font-size:14px;" onchange="setDebugStat('minionHp')" oninput="animateInput(this)"><button class="arrow-btn" onclick="adjustDebugStat('minionHp', 1)">▶</button>
         </div>
+      </div>
+    </div>
+    
+    <!-- 调试选项 -->
+    <div>
+      <h4 style="margin: 0 0 10px 0; color: #7b1fa2; font-size: 14px;">调试选项</h4>
+      <div style="margin-bottom: 8px;">
+        <label style="display: flex; align-items: center; font-size: 12px;">
+          <input type="checkbox" id="debug-show-hp" onchange="updateUI()" style="margin-right: 5px;">
+          显示每回合血量
+        </label>
+      </div>
+      <div style="margin-bottom: 8px;">
+        <label style="display: flex; align-items: center; font-size: 12px;">
+          <input type="checkbox" id="debug-full-log" onchange="updateUI()" style="margin-right: 5px;">
+          完整战斗记录(999轮)
+        </label>
       </div>
     </div>
     
