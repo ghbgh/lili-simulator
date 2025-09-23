@@ -2084,6 +2084,11 @@ function battleResult(lili, boss, opts={}) {
   let optBoss8Bug = opts.optBoss8Bug;
   let damageLog = [];
 
+  // 读取调试选项
+  const debugShowHp = document.getElementById('debug-show-hp')?.checked || false;
+  const debugFullLog = document.getElementById('debug-full-log')?.checked || false;
+  const maxLogRounds = debugFullLog ? 999 : 30;
+
   while (liliAlive && bossAlive && round < 1000) {
     // 第十只boss特殊：血量小于等于25%时不再攻击（回合开始判定）
     let bossCanAttackThisRound = true;
