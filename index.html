@@ -1897,6 +1897,22 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
   const maxLogRounds = debugFullLog ? 999 : 30;
 
   while (liliAlive && bossAlive && round < 1000) {
+    // 回合开始：检查boss是否已经死亡
+    if (bossHp <= 0) {
+      // boss特殊：hp为0后受到攻击死亡（BUG选项控制次数）
+      if (bossBattleIdx === 7) {
+        const requiredHits = optBoss8Bug ? 1 : 5; // BUG效果：1次攻击；正常：5次攻击
+        if (bossDeathDelay >= requiredHits) {
+          bossAlive = false;
+        }
+      } else {
+        bossAlive = false;
+      }
+    }
+    
+    // 如果boss已死，结束战斗
+    if (!bossAlive) break;
+    
     // 第十只boss特殊：血量小于等于25%时不再攻击（回合开始判定）
     let bossCanAttackThisRound = true;
     if (bossBattleIdx === 9 && bossHp <= boss.hp * 0.25) {
@@ -1911,19 +1927,29 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
       if (bossBattleIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
       if (round <= maxLogRounds) damageLog.push(`${round}:莉莉对Boss造成${liliDmg}点伤害`);
-      // boss特殊：hp为0后受到攻击死亡（BUG选项控制次数）
-      if (bossBattleIdx === 7 && bossHp <= 0) {
-        bossDeathDelay++;
-        const requiredHits = optBoss8Bug ? 1 : 5; // BUG效果：1次攻击；正常：5次攻击
-        if (bossDeathDelay <= requiredHits) bossAlive = true;
-        else bossAlive = false;
-      } else if (bossHp <= 0) {
-        bossAlive = false;
+      
+      // 立即检查boss死亡状态
+      if (bossHp <= 0) {
+        if (bossBattleIdx === 7) {
+          // boss8特殊：需要受到多次攻击才死亡
+          bossDeathDelay++;
+          const requiredHits = optBoss8Bug ? 1 : 5;
+          if (bossDeathDelay >= requiredHits) {
+            bossAlive = false;
+            break; // 立即结束攻击循环
+          }
+        } else {
+          bossAlive = false;
+          break; // 立即结束攻击循环
+        }
       }
     }
     
-    // 祈祷技能（莉莉攻击后，敌方攻击前）
-    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
+    // 如果boss死亡，结束战斗
+    if (!bossAlive) break;
+    
+    // 祈祷技能（莉莉攻击后，敌方攻击前），boss死亡时不触发祈祷
+    if (bossAlive && !optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
       let heal = Math.floor(lili.maxHp * prayAmount);
       
       // 先按原最大HP祈祷回血
@@ -1941,14 +1967,28 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
         // boss特殊：每次受伤最高10点
         if (bossBattleIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
-        if (round <= 30) {
+        
+        // 立即检查boss死亡状态
+        if (bossHp <= 0) {
+          if (bossBattleIdx === 7) {
+            bossDeathDelay++; // 雕像伤害也算一次攻击
+            const requiredHits = optBoss8Bug ? 1 : 5;
+            if (bossDeathDelay >= requiredHits) {
+              bossAlive = false;
+            }
+          } else {
+            bossAlive = false;
+          }
+        }
+        
+        if (round <= maxLogRounds) {
           let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
           if (opts.optPrayCount) logMessage += `（娃娃效果+4最大HP）`;
           logMessage += `，雕像效果对Boss造成${statueDmg}点伤害`;
           damageLog.push(logMessage);
         }
       } else {
-        if (round <= 30) {
+        if (round <= maxLogRounds) {
           let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
           if (opts.optPrayCount) logMessage += `（娃娃效果+4最大HP）`;
           damageLog.push(logMessage);
@@ -1956,20 +1996,14 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
       }
     }
     
+    // 如果boss在祈祷中死亡，结束战斗
+    if (!bossAlive) break;
+    
     // boss特殊：每回合移除对方12hp（禁锢时第一回合不生效）
     if (bossBattleIdx === 3 && bossAlive && !optImmunity && !(opts.optRestraint && round === 1)) {
       liliHp -= 12;
       totalHpConsumed += 12; // 记录总消耗血量
       if (round <= maxLogRounds) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
-      
-      // 芙莉蒂雅的戒指效果：反弹防御力伤害
-      if (opts.optMolili) {
-        let reflect = Math.max(1, liliDef - debuggedBoss.def);
-        // boss特殊：每次受伤最高10点
-        if (bossBattleIdx === 5) reflect = Math.min(reflect, 10);
-        bossHp -= reflect;
-        if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
-      }
     } else if (bossBattleIdx === 3 && bossAlive && optImmunity && !(opts.optRestraint && round === 1) && round <= 30) {
       damageLog.push(`${round}:Boss特殊攻击被免疫无效`);
     } else if (bossBattleIdx === 3 && bossAlive && opts.optRestraint && round === 1 && round <= 30) {
@@ -2014,6 +2048,21 @@ function battleResultForBoss(lili, boss, bossBattleIdx, opts={}) {
           if (bossBattleIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
           if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
+          
+          // 立即检查boss死亡状态
+          if (bossHp <= 0) {
+            if (bossBattleIdx === 7) {
+              bossDeathDelay++; // 反弹伤害也算一次攻击
+              const requiredHits = optBoss8Bug ? 1 : 5;
+              if (bossDeathDelay >= requiredHits) {
+                bossAlive = false;
+                break; // 立即结束攻击循环
+              }
+            } else {
+              bossAlive = false;
+              break; // 立即结束攻击循环
+            }
+          }
         }
         
         if (liliHp <= 0) liliAlive = false;
@@ -2090,6 +2139,22 @@ function battleResult(lili, boss, opts={}) {
   const maxLogRounds = debugFullLog ? 999 : 30;
 
   while (liliAlive && bossAlive && round < 1000) {
+    // 回合开始：检查boss是否已经死亡
+    if (bossHp <= 0) {
+      // boss特殊：hp为0后受到攻击死亡（BUG选项控制次数）
+      if (bossIdx === 7) {
+        const requiredHits = optBoss8Bug ? 1 : 5; // BUG效果：1次攻击；正常：5次攻击
+        if (bossDeathDelay >= requiredHits) {
+          bossAlive = false;
+        }
+      } else {
+        bossAlive = false;
+      }
+    }
+    
+    // 如果boss已死，结束战斗
+    if (!bossAlive) break;
+    
     // 第十只boss特殊：血量小于等于25%时不再攻击（回合开始判定）
     let bossCanAttackThisRound = true;
     if (bossIdx === 9 && bossHp <= boss.hp * 0.25) {
@@ -2104,19 +2169,29 @@ function battleResult(lili, boss, opts={}) {
       if (bossIdx === 5) liliDmg = Math.min(liliDmg, 10);
       bossHp -= liliDmg;
       if (round <= maxLogRounds) damageLog.push(`${round}:莉莉对Boss造成${liliDmg}点伤害`);
-      // boss特殊：hp为0后受到攻击死亡（BUG选项控制次数）
-      if (bossIdx === 7 && bossHp <= 0) {
-        bossDeathDelay++;
-        const requiredHits = optBoss8Bug ? 1 : 5; // BUG效果：1次攻击；正常：5次攻击
-        if (bossDeathDelay < requiredHits) bossAlive = true;
-        else bossAlive = false;
-      } else if (bossHp <= 0) {
-        bossAlive = false;
+      
+      // 立即检查boss死亡状态
+      if (bossHp <= 0) {
+        if (bossIdx === 7) {
+          // boss8特殊：需要受到多次攻击才死亡
+          bossDeathDelay++;
+          const requiredHits = optBoss8Bug ? 1 : 5;
+          if (bossDeathDelay >= requiredHits) {
+            bossAlive = false;
+            break; // 立即结束攻击循环
+          }
+        } else {
+          bossAlive = false;
+          break; // 立即结束攻击循环
+        }
       }
     }
     
-    // 祈祷技能（莉莉攻击后，敌方攻击前）
-    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
+    // 如果boss死亡，结束战斗
+    if (!bossAlive) break;
+    
+    // 祈祷技能（莉莉攻击后，敌方攻击前），boss死亡时不触发祈祷
+    if (bossAlive && !optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
       let heal = Math.floor(lili.maxHp * prayAmount);
       
       // 先按原最大HP祈祷回血
@@ -2139,6 +2214,20 @@ function battleResult(lili, boss, opts={}) {
         // boss特殊：每次受伤最高10点
         if (bossIdx === 5) statueDmg = Math.min(statueDmg, 10);
         bossHp -= statueDmg;
+        
+        // 立即检查boss死亡状态
+        if (bossHp <= 0) {
+          if (bossIdx === 7) {
+            bossDeathDelay++; // 雕像伤害也算一次攻击
+            const requiredHits = optBoss8Bug ? 1 : 5;
+            if (bossDeathDelay >= requiredHits) {
+              bossAlive = false;
+            }
+          } else {
+            bossAlive = false;
+          }
+        }
+        
         if (round <= maxLogRounds) {
           let logMessage = `${round}:攻击后:莉莉触发祈祷，恢复${heal}点生命`;
           if (optPrayCount) logMessage += `（娃娃效果+4最大HP）`;
@@ -2154,20 +2243,14 @@ function battleResult(lili, boss, opts={}) {
       }
     }
     
+    // 如果boss在祈祷中死亡，结束战斗
+    if (!bossAlive) break;
+    
     // boss特殊：每回合移除对方12hp（禁锢时第一回合不生效）
     if (bossIdx === 3 && bossAlive && !optImmunity && !(optRestraint && round === 1)) {
       liliHp -= 12;
       totalHpConsumed += 12; // 记录总消耗血量
       if (round <= maxLogRounds) damageLog.push(`${round}:Boss特殊移除莉莉12点生命`);
-      
-      // 芙莉蒂雅的戒指效果：反弹防御力伤害
-      if (optMolili) {
-        let reflect = Math.max(1, lili.def - debuggedBoss.def);
-        // boss特殊：每次受伤最高10点
-        if (bossIdx === 5) reflect = Math.min(reflect, 10);
-        bossHp -= reflect;
-        if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
-      }
     } else if (bossIdx === 3 && bossAlive && optImmunity && !(optRestraint && round === 1) && round <= 30) {
       damageLog.push(`${round}:Boss特殊攻击被免疫无效`);
     } else if (bossIdx === 3 && bossAlive && optRestraint && round === 1 && round <= 30) {
@@ -2212,6 +2295,21 @@ function battleResult(lili, boss, opts={}) {
           if (bossIdx === 5) reflect = Math.min(reflect, 10);
           bossHp -= reflect;
           if (round <= maxLogRounds) damageLog.push(`${round}:芙莉蒂雅的戒指反弹${reflect}点伤害给Boss`);
+          
+          // 立即检查boss死亡状态
+          if (bossHp <= 0) {
+            if (bossIdx === 7) {
+              bossDeathDelay++; // 反弹伤害也算一次攻击
+              const requiredHits = optBoss8Bug ? 1 : 5;
+              if (bossDeathDelay >= requiredHits) {
+                bossAlive = false;
+                break; // 立即结束攻击循环
+              }
+            } else {
+              bossAlive = false;
+              break; // 立即结束攻击循环
+            }
+          }
         }
         
         if (liliHp <= 0) liliAlive = false;
@@ -2270,8 +2368,13 @@ function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
       minionHp -= liliDmg;
     }
     
-    // 祈祷技能（莉莉攻击后，敌方攻击前）
-    if (!optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
+    // 检查小怪是否死亡
+    if (minionHp <= 0) {
+      minionAlive = false;
+    }
+    
+    // 祈祷技能（莉莉攻击后，敌方攻击前），小怪死亡时不触发祈祷
+    if (minionAlive && !optNoPray && liliHp > 0 && liliHp <= Math.floor(lili.maxHp * 0.3) && prayCount > 0) {
       let heal = Math.floor(lili.maxHp * prayAmount);
       
       // 先按原最大HP祈祷回血
@@ -2298,10 +2401,6 @@ function minionBattleResult(lili, minion, minionBattleIdx, opts={}) {
     // 小怪特殊：反弹100%真实伤害
     if (minionBattleIdx === 8 && minion.special === '反弹100%真实伤害' && !optImmunity) {
       liliHp -= liliAtk;
-    }
-    
-    if (minionHp <= 0) {
-      minionAlive = false;
     }
     
     // 小怪攻击
